@@ -11,7 +11,7 @@ Renderer.Spacial = function( transformable )
 {
     /**
     * Parent element.
-    * @type {Core.Transformable|null}
+    * @type {Renderer.Spacial|null}
     * @protected
     */
     this.parent = null;
@@ -25,10 +25,10 @@ Renderer.Spacial = function( transformable )
 
     /**
     * Spacial's transformable, define position, scale, rotation, ….
-    * @type {Renderer.Transformable}
+    * @type {Core.Transformable}
     * @public
     */
-    this.transformable = transformable || new Nucleus.Transformable();
+    this.transformable = transformable || new Core.Transformable();
 
 };
 
@@ -48,4 +48,22 @@ Renderer.Spacial.prototype.add = function( object )
 Renderer.Spacial.prototype.setTransformable = function( transformable ) 
 {
     this.transformable = transformable;
+};
+
+/**
+ * Return the children of this spacial element.
+ * @return {Array.<Renderer.Spacial>} A reference to the children.
+ */
+Renderer.Spacial.prototype.getChildren = function() 
+{
+    return this.children;
+};
+
+/**
+ * Return the element parent.
+ * @return {Renderer.Spacial|null} A reference to the parent or null.
+ */
+Renderer.Spacial.prototype.getParent = function() 
+{
+    return this.parent;
 };

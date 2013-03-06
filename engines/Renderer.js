@@ -1,8 +1,9 @@
 goog.provide('Renderer.main');
 
-goog.require('Renderer.WebGLRenderer');
 goog.require('Renderer.Cameras.Camera');
+goog.require('Renderer.Scene');
 goog.require('Renderer.WebGL.Texture');
+goog.require('Renderer.WebGLRenderer');
 
 Renderer.main = function() 
 {

@@ -28,12 +28,19 @@ goog.inherits( Renderer.Private.Image, Renderer.Private.VisualResource );
  */
 Renderer.Private.Image.prototype.loadFromFile = function( path ) 
 {
-	var thisCopy = this;
-	this.data.onload = function() 
-	{
-        thisCopy.setSize( this.width, this.height );
-		thisCopy.onResourceLoading();
-        thisCopy.ready = true;
-	};
+	this.data.onload  = this.onLoad.bind( this, path );
+    this.data.onerror = this.onError.bind( this, path );
 	this.data.src = path;
+};
+
+/**
+ * Call when the resource loading is successfull.
+ * @param {string} path Location of the resource.
+ * @override
+ */
+Renderer.Private.Image.prototype.onLoad = function( path ) 
+{
+    this.setSize( this.width, this.height );
+    this.onResourceLoading();
+    this.ready = true;
 };

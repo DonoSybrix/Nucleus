@@ -20,12 +20,3 @@ Renderer.Scene = function()
 
 };
 goog.inherits( Renderer.Scene, Renderer.Spacial );
-
-/**
- * Return the children of this spacial element.
- * @return {Array.<!Renderer.Spacial>} A reference to the children.
- */
-Renderer.Scene.prototype.getChildren = function() 
-{
-    return this.children;
-};

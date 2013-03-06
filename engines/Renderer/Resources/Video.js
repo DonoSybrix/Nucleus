@@ -35,22 +35,27 @@ goog.inherits( Renderer.Private.Video, Renderer.Private.VisualResource );
  */
 Renderer.Private.Video.prototype.loadFromFile = function( path ) 
 {
-    var thisCopy = this;
-    var onLoad = function() 
-    {
-        thisCopy.setSize( this.width, this.height );
-        thisCopy.onResourceLoading();
-        thisCopy.ready = true;
-
-        if( thisCopy.autoplay )
-        {
-            thisCopy.play();
-        }
-    };
-
     this.data.preload = "auto";
-    this.data.addEventListener( "canplaythrough", onLoad, true );
+    this.data.addEventListener( "canplaythrough", this.onLoad.bind( this, path ), true );
+    this.data.addEventListener( "error", this.onError.bind( this, path ), true );
     this.data.src = path;
+};
+
+/**
+ * Call when the resource loading is successfull.
+ * @param {string} path Location of the resource.
+ * @override
+ */
+Renderer.Private.Video.prototype.onLoad = function( path ) 
+{
+    this.setSize( this.width, this.height );
+    this.onResourceLoading();
+    this.ready = true;
+
+    if( this.autoplay )
+    {
+        this.play();
+    }
 };
 
 /**

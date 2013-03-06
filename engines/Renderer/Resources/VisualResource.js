@@ -1,4 +1,5 @@
 goog.provide('Renderer.Private.VisualResource');
+goog.require('Nucleus.ErrorManager');
 
 /**
  * A visual resource.
@@ -57,6 +58,22 @@ Renderer.Private.VisualResource.prototype.loadFromFile = function( path )
 	};
 	this.data.src = path;
 };
+
+/**
+ * Call when the resource loading has encountered an error.
+ * @param {string} path Location of the resource.
+ */
+Renderer.Private.VisualResource.prototype.onError = function( path ) 
+{
+    Nucleus.ErrorManager.log("Resource \""+ path + "\" not found.");
+};
+
+/**
+ * Call when the resource loading is successfull.
+ * @param {string} path Location of the resource.
+ */
+Renderer.Private.VisualResource.prototype.onLoad = function( path ) { };
+
 /**
  * Function to call when loading is done.
  */
