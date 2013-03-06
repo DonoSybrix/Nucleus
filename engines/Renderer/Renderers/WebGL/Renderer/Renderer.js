@@ -30,27 +30,52 @@ Renderer.WebGLRenderer = function( canvas )
 
 /**
  * Method called before the rendering.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
+ * @private
  */
-Renderer.WebGLRenderer.prototype.preRendering = function() 
+Renderer.WebGLRenderer.prototype.preRendering = function( scene, camera ) 
 {
+    this.context.clearColor( 0.2, 0.2, 0.2, 1.0 );
     this.context.clear( goog.webgl.COLOR_BUFFER_BIT | goog.webgl.DEPTH_BUFFER_BIT );
-    this.context.clearColor(0.0, 0.0, 0.0, 1.0);
 };
 
 /**
  * Method called after the rendering.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
+ * @private
  */
-Renderer.WebGLRenderer.prototype.postRendering = function() 
+Renderer.WebGLRenderer.prototype.postRendering = function( scene, camera ) 
 {
 
 };
 
 /**
- * Rendering method.
+ * Render the given scene with the given camera.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
  */
-Renderer.WebGLRenderer.prototype.rendering = function() 
+Renderer.WebGLRenderer.prototype.render = function( scene, camera ) 
 {
+	this.preRendering( scene, camera );
+	this.rendering( scene, camera );
+	this.postRendering( scene, camera );
+};
 
+/**
+ * Rendering method.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
+ */
+Renderer.WebGLRenderer.prototype.rendering = function( scene, camera ) 
+{
+	var spacials = scene.getChildren();
+
+	for( var i = 0, len = scene.getChildrenCount(); i < len; ++i ) 
+	{
+
+	}
 };
 
 /**

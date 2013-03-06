@@ -48,7 +48,7 @@ Renderer.WebGL.Texture.prototype.create = function( width, height )
 	var context = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
 
 	// Create source (Image here).
-	this.createSource();
+	this.source = this.createSource();
 
 	// Set dimensions.
 	this.source.setSize( width, height );
@@ -76,8 +76,9 @@ Renderer.WebGL.Texture.prototype.create = function( width, height )
 };
 
 /**
- * Create source from file type.
+ * Create source from file's type.
  * @param {string=} path Path to the image file.
+ * @return {Renderer.Private.Image|Renderer.Private.Video} A new resource.
  */
 Renderer.WebGL.Texture.prototype.createSource = function( path ) 
 {
@@ -90,15 +91,11 @@ Renderer.WebGL.Texture.prototype.createSource = function( path )
 
 		if( isVideo == true )
 		{
-			this.source = new Renderer.Private.Video();
+			return new Renderer.Private.Video();
 		}
 	}
 
-	// Create image.
-	if( this.source == null )
-	{
-		this.source = new Renderer.Private.Image();
-	}
+	return new Renderer.Private.Image();
 };
 
 /**
@@ -127,21 +124,12 @@ Renderer.WebGL.Texture.prototype.fill = function( data )
  */
 Renderer.WebGL.Texture.prototype.loadFromFile = function( path ) 
 {
-	var thisCopy = this;
-
 	// Create source (Image here).
-	this.createSource( path );
+	this.source = this.createSource( path );
 
 	// Now load.
+	this.source.setCallbackOnLoadingCompleted( this.update.bind( this ) );
 	this.source.loadFromFile( path );
-	this.source.setCallbackOnLoadingCompleted( function() 
-	{
-		// Fill with data
-		thisCopy.fill( thisCopy.source.getData() );
-
-		// Unbind.
-   		Renderer.WebGL.Texture.unbind();
-	});
 };
 
 /**
@@ -164,6 +152,14 @@ Renderer.WebGL.Texture.unbind = function()
 {
 	var context = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
 	context.bindTexture( goog.webgl.TEXTURE_2D, null );
+};
+
+/**
+ * Update texture with this source.
+ */
+Renderer.WebGL.Texture.prototype.update = function() 
+{
+	this.fill( this.source.getData() );
 };
 
 /**

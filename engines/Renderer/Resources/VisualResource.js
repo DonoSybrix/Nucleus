@@ -65,7 +65,7 @@ Renderer.Private.VisualResource.prototype.loadFromFile = function( path )
  */
 Renderer.Private.VisualResource.prototype.onError = function( path ) 
 {
-    Nucleus.ErrorManager.log("Resource \""+ path + "\" not found.");
+    Nucleus.ErrorManager.warning('Resource \"' + path + '\" not found.');
 };
 
 /**

@@ -64,6 +64,7 @@ Renderer.WebGL.ContextManager.prototype.create = function( canvas )
 /**
  * Register a new context.
  * @param {WebGLRenderingContext} context Context to register.
+ * @private
  */
 Renderer.WebGL.ContextManager.prototype.register = function(  context ) 
 {

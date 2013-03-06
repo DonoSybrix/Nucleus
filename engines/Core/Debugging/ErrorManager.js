@@ -15,9 +15,20 @@ Nucleus.ErrorManager = function()
  * Log an error.
  * @param {string} errorName Error's name.
  */
-Nucleus.ErrorManager.log = function( errorName ) 
+Nucleus.ErrorManager.warning = function( errorName ) 
 {
     if( Nucleus.Config.DEBUG == true ) {
-        window['console']['log']( errorName );
+        window['console']['warn']( 'Nucleus log: ' + errorName );
+    }
+};
+
+/**
+ * Log an error.
+ * @param {string} errorName Error's name.
+ */
+Nucleus.ErrorManager.error = function( errorName ) 
+{
+    if( Nucleus.Config.DEBUG == true ) {
+        window['console']['error']( 'Nucleus log: ' + errorName );
     }
 };

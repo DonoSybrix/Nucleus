@@ -12,14 +12,6 @@ goog.require('Nucleus.Resource');
 Nucleus.File = function( fileName, callback ) 
 {
     Nucleus.Resource.call( this );
-
-    /**
-    * Load the asked file.
-    */
-    if( fileName )
-    {
-        this.loadFromFile( fileName, callback );
-    }
 };
 goog.inherits( Nucleus.File, Nucleus.Resource );
 
@@ -29,11 +21,9 @@ goog.inherits( Nucleus.File, Nucleus.Resource );
  * @param {function(string, string)=} callback Function to execute when loading is done.
  * @override
  */
-Nucleus.File.prototype.loadFromFile = function( fileName, callback ) 
+Nucleus.File.read = function( fileName, callback ) 
 {
-    var thisCopy = this;
-
-    var client   = new XMLHttpRequest();
+    var client = new XMLHttpRequest();
     client.open( 'GET', fileName, true );
 
     client.onreadystatechange = function() 

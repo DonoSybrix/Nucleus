@@ -1,4 +1,4 @@
-goog.provide('Renderer.Spacial');
+goog.provide('Renderer.Core.Spacial');
 goog.require('Core.Transformable');
 
 /**
@@ -7,21 +7,28 @@ goog.require('Core.Transformable');
  * @param {Core.Transformable=} transformable The transformable to use.
  * @author Donovan ORHAN <dono@sybrix.fr>
  */
-Renderer.Spacial = function( transformable ) 
+Renderer.Core.Spacial = function( transformable ) 
 {
     /**
     * Parent element.
-    * @type {Renderer.Spacial|null}
+    * @type {Renderer.Core.Spacial|null}
     * @protected
     */
     this.parent = null;
 
     /**
     * Spacial's Children.
-    * @type {Array.<Renderer.Spacial>}
+    * @type {Array.<Renderer.Core.Spacial>}
     * @protected
     */
     this.children = [];
+
+    /**
+    * Children counter.
+    * @type {number}
+    * @protected
+    */
+    this.childrenCounter = 0;
 
     /**
     * Spacial's transformable, define position, scale, rotation, ….
@@ -34,36 +41,46 @@ Renderer.Spacial = function( transformable )
 
 /**
  * Add a children to the spacial element.
- * @param {Renderer.Spacial} object Element to add.
+ * @param {Renderer.Core.Spacial} object Element to add.
  */
-Renderer.Spacial.prototype.add = function( object ) 
+Renderer.Core.Spacial.prototype.add = function( object ) 
 {
-    this.children[this.children.length] = object;
+    this.children[this.childrenCounter] = object;
+    this.childrenCounter++;
 };
 
 /**
  * Change the transformable linked to the spacial element.
  * @param {Core.Transformable} transformable A Transformable object.
  */
-Renderer.Spacial.prototype.setTransformable = function( transformable ) 
+Renderer.Core.Spacial.prototype.setTransformable = function( transformable ) 
 {
     this.transformable = transformable;
 };
 
 /**
  * Return the children of this spacial element.
- * @return {Array.<Renderer.Spacial>} A reference to the children.
+ * @return {Array.<Renderer.Core.Spacial>} A reference to the children.
  */
-Renderer.Spacial.prototype.getChildren = function() 
+Renderer.Core.Spacial.prototype.getChildren = function() 
 {
     return this.children;
 };
 
 /**
- * Return the element parent.
- * @return {Renderer.Spacial|null} A reference to the parent or null.
+ * Return the number of children of this spacial element.
+ * @return {number} Children counter.
  */
-Renderer.Spacial.prototype.getParent = function() 
+Renderer.Core.Spacial.prototype.getChildrenCount = function() 
+{
+    return this.childrenCounter;
+};
+
+/**
+ * Return the element parent.
+ * @return {Renderer.Core.Spacial|null} A reference to the parent or null.
+ */
+Renderer.Core.Spacial.prototype.getParent = function() 
 {
     return this.parent;
 };

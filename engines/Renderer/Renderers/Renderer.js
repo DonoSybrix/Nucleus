@@ -1,4 +1,6 @@
 goog.provide('Renderer.Renderer');
+goog.require('Renderer.Camera');
+goog.require('Renderer.Scene');
 goog.require('Renderer.TextureFactory');
 
 /**
@@ -10,18 +12,31 @@ Renderer.Renderer = function() {};
 
 /**
  * Method called before the rendering.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
  */
-Renderer.Renderer.prototype.preRendering = function() {};
+Renderer.Renderer.prototype.preRendering = function( scene, camera ) {};
 
 /**
  * Method called after the rendering.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
  */
-Renderer.Renderer.prototype.postRendering = function() {};
+Renderer.Renderer.prototype.postRendering = function( scene, camera ) {};
 
 /**
  * Rendering method.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
  */
-Renderer.Renderer.prototype.rendering = function() {};
+Renderer.Renderer.prototype.rendering = function( scene, camera ) {};
+
+/**
+ * Render the given scene with the given camera.
+ * @param {Renderer.Scene} scene Scene to draw.
+ * @param {Renderer.Camera} camera Camera to use.
+ */
+Renderer.Renderer.prototype.render = function( scene, camera ) {};
 
 /**
  * Return the renderer's height.

@@ -1,4 +1,4 @@
-goog.provide('Renderer.Cameras.Camera');
+goog.provide('Renderer.Camera');
 goog.require('Core.Transformable');
 goog.require('goog.vec.Mat3');
 
@@ -9,7 +9,7 @@ goog.require('goog.vec.Mat3');
  * @extends Core.Transformable
  * @author Donovan ORHAN <dono@sybrix.fr>
  */
-Renderer.Cameras.Camera = function( cameraType ) 
+Renderer.Camera = function( cameraType ) 
 {
     Core.Transformable.call( this );
 
@@ -47,7 +47,7 @@ Renderer.Cameras.Camera = function( cameraType )
     this.changeType( cameraType );
 
 };
-goog.inherits( Renderer.Cameras.Camera, Core.Transformable );
+goog.inherits( Renderer.Camera, Core.Transformable );
 
 /**
  * Set the look direction.
@@ -55,7 +55,7 @@ goog.inherits( Renderer.Cameras.Camera, Core.Transformable );
  * @param {number} centerY Center of the eye on Y.
  * @param {number} centerZ Center of the eye on Z.
  */
-Renderer.Cameras.Camera.prototype.lookAt = function( centerX, centerY, centerZ ) 
+Renderer.Camera.prototype.lookAt = function( centerX, centerY, centerZ ) 
 {
     this.viewMatrix =  /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makeLookAt( goog.vec.Mat4.createFloat32(), 
@@ -72,7 +72,7 @@ Renderer.Cameras.Camera.prototype.lookAt = function( centerX, centerY, centerZ )
  * @param {number} near Distance of near objects.
  * @param {number} far Distance of far objects.
  */
-Renderer.Cameras.Camera.prototype.makePerspective = function( fovy, ratio, near, far ) 
+Renderer.Camera.prototype.makePerspective = function( fovy, ratio, near, far ) 
 {
     this.projectionMatrix = /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makePerspective( goog.vec.Mat4.createFloat32(), fovy, ratio, near, far ) );
@@ -87,7 +87,7 @@ Renderer.Cameras.Camera.prototype.makePerspective = function( fovy, ratio, near,
  * @param {number} near Distance of near objects.
  * @param {number} far Distance of far objects.
  */
-Renderer.Cameras.Camera.prototype.makeOrthographic = function( left, right, bottom, top, near, far ) 
+Renderer.Camera.prototype.makeOrthographic = function( left, right, bottom, top, near, far ) 
 {
     this.projectionMatrix = /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makeOrtho( goog.vec.Mat4.createFloat32(), left, right, bottom, top, near, far ) );
@@ -102,7 +102,7 @@ Renderer.Cameras.Camera.prototype.makeOrthographic = function( left, right, bott
  * @param {number} near Distance of near objects.
  * @param {number} far Distance of far objects.
  */
-Renderer.Cameras.Camera.prototype.makeFrustum = function( left, right, bottom, top, near, far ) 
+Renderer.Camera.prototype.makeFrustum = function( left, right, bottom, top, near, far ) 
 {
     this.projectionMatrix = /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makeFrustum( goog.vec.Mat4.createFloat32(), left, right, bottom, top, near, far ) );
@@ -112,7 +112,7 @@ Renderer.Cameras.Camera.prototype.makeFrustum = function( left, right, bottom, t
  * Auto configure the camera with the given type.
  * @param {string} type Type asked, 2D or 3D.
  */
-Renderer.Cameras.Camera.prototype.changeType = function( type ) 
+Renderer.Camera.prototype.changeType = function( type ) 
 {
     // Default view direction.
     this.lookAt( 0, 0, -5 ); 
@@ -135,7 +135,7 @@ Renderer.Cameras.Camera.prototype.changeType = function( type )
  * @return {goog.vec.Mat4.Float32} A reference to the object's matrix.
  * @override
  */
-Renderer.Cameras.Camera.prototype.getMatrix = function()
+Renderer.Camera.prototype.getMatrix = function()
 {
     if( this.needTransformUpdate ) 
     {
@@ -161,7 +161,7 @@ Renderer.Cameras.Camera.prototype.getMatrix = function()
  * Return the normal matrix of the camera.
  * @return {goog.vec.Mat3.Float32} A reference to the normals matrix.
  */
-Renderer.Cameras.Camera.prototype.getNormalMatrix = function()
+Renderer.Camera.prototype.getNormalMatrix = function()
 {
     goog.vec.Mat4.invert( this.matrix, this.normalMatrix );
     goog.vec.Mat3.transpose( this.normalMatrix, this.normalMatrix );
@@ -173,7 +173,7 @@ Renderer.Cameras.Camera.prototype.getNormalMatrix = function()
  * Return the projection matrix.
  * @return {goog.vec.Mat3.Float32} A reference to the projection matrix.
  */
-Renderer.Cameras.Camera.prototype.getProjectionMatrix = function()
+Renderer.Camera.prototype.getProjectionMatrix = function()
 {
     return this.projectionMatrix;
 };
@@ -182,7 +182,7 @@ Renderer.Cameras.Camera.prototype.getProjectionMatrix = function()
  * Return the view matrix.
  * @return {goog.vec.Mat3.Float32} A reference to the view matrix.
  */
-Renderer.Cameras.Camera.prototype.getViewMatrix = function()
+Renderer.Camera.prototype.getViewMatrix = function()
 {
     return this.viewMatrix;
 };

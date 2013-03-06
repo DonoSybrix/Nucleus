@@ -23,7 +23,8 @@ Renderer.WebGL.ContextFactory.prototype.create = function( canvas )
 
     try
     {
-        gl = canvas.getContext("experimental-webgl", { premultipliedAlpha: false, alpha: false } );
+        var flags = { premultipliedAlpha: false, alpha: false };
+        gl = canvas.getContext("webgl", flags ) || canvas.getContext("experimental-webgl", flags );
     }
     catch(e) {}
 

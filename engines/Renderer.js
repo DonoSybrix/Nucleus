@@ -1,9 +1,10 @@
 goog.provide('Renderer.main');
 
-goog.require('Renderer.Cameras.Camera');
+goog.require('Renderer.Camera');
 goog.require('Renderer.Scene');
 goog.require('Renderer.WebGL.Texture');
 goog.require('Renderer.WebGLRenderer');
+goog.require('Renderer.WebGLRenderer.Program');
 
 Renderer.main = function() 
 {
@@ -11,6 +12,16 @@ Renderer.main = function()
 	* Create a rendering area.
 	*/
 	var renderer = new Renderer.WebGLRenderer( document.getElementById("test") );
+
+	/**
+	* Create a camera.
+	*/
+	var camera = new Renderer.Camera("3D");
+
+	/**
+	* Create a scene.
+	*/
+	var scene = new Renderer.Scene();
 
 	/**
 	* Get the texture factory for this kind of rendererer.
@@ -23,10 +34,17 @@ Renderer.main = function()
 	var texture = textureFactory.create();
 	texture.loadFromFile("data/magpie.png");
 
+	/**
+	* Create custom program.
+	*/
+	var program = new Renderer.WebGLRenderer.Program();
+	program.loadFromFolder("data/shaders/basic");
 
-	var texture2 = textureFactory.create();
-	texture2.loadFromFile("data/bunny.ogg");
-	texture2.getSource().play();
+
+	/**
+	* Finally draw.
+	*/
+	renderer.render( scene, camera );
 
 };
 
