@@ -1,10 +1,7 @@
 goog.provide('Renderer.main');
-
-goog.require('Renderer.Camera');
-goog.require('Renderer.Scene');
 goog.require('Renderer.WebGL.Texture');
 goog.require('Renderer.WebGLRenderer');
-goog.require('Renderer.WebGLRenderer.Program');
+goog.require('Renderer.WebGL.ProgramLibrary');
 
 Renderer.main = function() 
 {
@@ -26,26 +23,31 @@ Renderer.main = function()
 	/**
 	* Get the texture factory for this kind of rendererer.
 	*/
-	var textureFactory = renderer.getTextureFactory();
+	// var textureFactory = renderer.getTextureFactory();
 
 	/**
 	* Create a first texture.
 	*/
-	var texture = textureFactory.create();
-	texture.loadFromFile("data/magpie.png");
+	// var texture = textureFactory.create();
+	// texture.loadFromFile("data/magpie.png");
 
 	/**
-	* Create custom program.
+	* Create a simple object.
 	*/
-	var program = new Renderer.WebGLRenderer.Program();
-	program.loadFromFolder("data/shaders/basic");
+/*	var mesh = new Renderer.Mesh();
+	mesh.setGeometry( new Renderer.Primitive.Triangle() );*/
 
+	/**
+	* Add mesh to the scene.
+	*/
+	// scene.add( mesh );
+
+	var program = Renderer.WebGL.ProgramLibrary.getInstance().getDefaultProgram();
 
 	/**
 	* Finally draw.
 	*/
 	renderer.render( scene, camera );
-
 };
 
 window['application'] = Renderer.main;

@@ -13,6 +13,11 @@ goog.require('Renderer.WebGL.ContextManager');
  */
 Renderer.WebGL.Texture = function( context ) 
 {
+	/**
+	* Check the context.
+	*/
+	context = context || Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
+
     /**
     * Id.
     * @type {WebGLTexture}

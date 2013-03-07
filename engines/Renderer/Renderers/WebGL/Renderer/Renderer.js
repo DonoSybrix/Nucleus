@@ -2,6 +2,7 @@ goog.provide('Renderer.WebGLRenderer');
 goog.require('Renderer.Renderer');
 goog.require('Renderer.WebGL.ContextManager');
 goog.require('Renderer.WebGL.TextureFactory');
+goog.require('Renderer.WebGL.RendererCache');
 
 /**
  * The WebGL renderer.
@@ -25,6 +26,13 @@ Renderer.WebGLRenderer = function( canvas )
     * @private
 	*/
 	this.textureFactory = new Renderer.WebGL.TextureFactory( this.context );
+
+	/**
+	* Cache used by the renderer.
+	* @type {Renderer.WebGL.RendererCache}
+	* @private
+	*/
+	this.cache = new Renderer.WebGL.RendererCache();
 
 };
 
@@ -64,6 +72,30 @@ Renderer.WebGLRenderer.prototype.render = function( scene, camera )
 };
 
 /**
+ * Draw a mesh with VBO.
+ * @param {Renderer.Camera} camera Camera to use.
+ * @param {Renderer.Core.Spacial} mesh Mesh to draw.
+ */
+Renderer.WebGLRenderer.prototype.renderMesh = function( camera, mesh ) 
+{
+	/*this.cache.program.bind();
+	this.cache.program.sendCommonUniforms();
+
+	this.cache.program.enableAttributs();
+	this.cache.program.sendPersonalUniforms();*/
+};
+
+/**
+ * Draw a mesh without VBO.
+ * @param {Renderer.Camera} camera Camera to use.
+ * @param {Renderer.Core.Spacial} mesh Mesh to draw.
+ */
+Renderer.WebGLRenderer.prototype.renderMeshWithoutVBO = function( camera, mesh ) 
+{
+
+};
+
+/**
  * Rendering method.
  * @param {Renderer.Scene} scene Scene to draw.
  * @param {Renderer.Camera} camera Camera to use.
@@ -74,7 +106,7 @@ Renderer.WebGLRenderer.prototype.rendering = function( scene, camera )
 
 	for( var i = 0, len = scene.getChildrenCount(); i < len; ++i ) 
 	{
-
+		this.renderMesh( camera, spacials[i] );
 	}
 };
 
