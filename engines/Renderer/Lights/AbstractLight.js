@@ -1,5 +1,6 @@
 goog.provide('Renderer.Private.AbstractLight');
 goog.require('Renderer.Core.Spacial');
+goog.require('Renderer.Core.Color');
 
 /**
  * An abstract light.
@@ -13,24 +14,24 @@ Renderer.Private.AbstractLight = function()
 
     /**
     * Light's color.
-    * @type {goog.vec.Vec3.Float32}
+    * @type {Renderer.Core.Color}
     * @protected
     */
-    this.color = goog.vec.Vec3.createFloat32FromValues( 1.0, 1.0, 1.0 );
+    this.color = new Renderer.Core.Color();
 
     /**
     * Light's direction.
-    * @type {goog.vec.Vec3.Float32}
+    * @type {goog.vec.Float32}
     * @protected
     */
     this.direction = goog.vec.Vec3.createFloat32FromValues( 1.0, 1.0, 1.0 );
 
     /**
     * Light's attenuation.
-    * @type {goog.vec.Vec3.Float32}
+    * @type {Renderer.Core.Color}
     * @protected
     */
-    this.attenuation = goog.vec.Vec3.createFloat32FromValues( 0.0, 1.0, 0.0 );
+    this.attenuation = new Renderer.Core.Color();
 
     /**
     * Light's state.
@@ -44,7 +45,7 @@ goog.inherits( Renderer.Private.AbstractLight, Renderer.Core.Spacial );
 
 /**
  * Return light's attenuation.
- * @return {goog.vec.Vec3.Float32} The light attenuation.
+ * @return {Renderer.Core.Color} The light attenuation.
  */
 Renderer.Private.AbstractLight.prototype.getAttenuation = function() 
 {
@@ -53,7 +54,7 @@ Renderer.Private.AbstractLight.prototype.getAttenuation = function()
 
 /**
  * Return light's color.
- * @return {goog.vec.Vec3.Float32} The light color.
+ * @return {Renderer.Core.Color} The light color.
  */
 Renderer.Private.AbstractLight.prototype.getColor = function() 
 {
@@ -62,7 +63,7 @@ Renderer.Private.AbstractLight.prototype.getColor = function()
 
 /**
  * Return light's direction.
- * @return {goog.vec.Vec3.Float32} The light direction.
+ * @return {goog.vec.Float32} The light direction.
  */
 Renderer.Private.AbstractLight.prototype.getDirection = function() 
 {

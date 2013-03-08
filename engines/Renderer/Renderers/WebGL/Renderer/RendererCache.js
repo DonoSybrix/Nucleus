@@ -26,6 +26,15 @@ Renderer.WebGL.RendererCache = function()
 };
 
 /**
+* Clear cache.
+*/
+Renderer.WebGL.RendererCache.prototype.clear = function() 
+{
+	this.program = null;
+	this.texture = null;
+};
+
+/**
 * Change program in cache.
 * @param {Renderer.WebGL.Program} program Program to use.
 */

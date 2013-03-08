@@ -1,4 +1,5 @@
 goog.provide('Renderer.WebGLRenderer');
+goog.require('Renderer.Mesh');
 goog.require('Renderer.Renderer');
 goog.require('Renderer.WebGL.ContextManager');
 goog.require('Renderer.WebGL.TextureFactory');
@@ -7,7 +8,7 @@ goog.require('Renderer.WebGL.RendererCache');
 /**
  * The WebGL renderer.
  * @constructor
- * @implements {Renderer.Renderer}
+ * @implements Renderer.Renderer
  * @param {HTMLElement} canvas Canvas to use as a renderer.
  * @author Donovan ORHAN <dono@sybrix.fr>
  */
@@ -74,9 +75,9 @@ Renderer.WebGLRenderer.prototype.render = function( scene, camera )
 /**
  * Draw a mesh with VBO.
  * @param {Renderer.Camera} camera Camera to use.
- * @param {Renderer.Core.Spacial} mesh Mesh to draw.
+ * @param {Renderer.Mesh} mesh Mesh to draw.
  */
-Renderer.WebGLRenderer.prototype.renderMesh = function( camera, mesh ) 
+Renderer.WebGLRenderer.prototype.renderMeshWithVBO = function( camera, mesh ) 
 {
 	/*this.cache.program.bind();
 	this.cache.program.sendCommonUniforms();
@@ -88,11 +89,30 @@ Renderer.WebGLRenderer.prototype.renderMesh = function( camera, mesh )
 /**
  * Draw a mesh without VBO.
  * @param {Renderer.Camera} camera Camera to use.
- * @param {Renderer.Core.Spacial} mesh Mesh to draw.
+ * @param {Renderer.Mesh} mesh Mesh to draw.
  */
 Renderer.WebGLRenderer.prototype.renderMeshWithoutVBO = function( camera, mesh ) 
 {
 
+};
+
+/**
+ * Draw the given mesh.
+ * @param {Renderer.Camera} camera Camera to use.
+ * @param {Renderer.Mesh} mesh Mesh to draw.
+ */
+Renderer.WebGLRenderer.prototype.renderMesh = function( camera, mesh ) 
+{
+	// Draw the mesh.
+	this.renderMeshWithoutVBO( camera, mesh );
+
+	// Check for submeshes.
+	var spacials = mesh.getChildren();
+	for( var i = 0, len = mesh.getChildrenCount(); i < len; ++i ) 
+	{
+		this.renderMesh( camera,
+						 /** @type {Renderer.Mesh} */(spacials[i]) );
+	}
 };
 
 /**
@@ -104,10 +124,15 @@ Renderer.WebGLRenderer.prototype.rendering = function( scene, camera )
 {
 	var spacials = scene.getChildren();
 
+	// Iterate over elements.
 	for( var i = 0, len = scene.getChildrenCount(); i < len; ++i ) 
 	{
-		this.renderMesh( camera, spacials[i] );
+		this.renderMesh( camera, 
+						 /** @type {Renderer.Mesh} */(spacials[i]) );
 	}
+
+	// Clear cache and previous bind.
+	this.cache.clear();
 };
 
 /**

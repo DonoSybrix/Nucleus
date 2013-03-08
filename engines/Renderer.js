@@ -2,6 +2,7 @@ goog.provide('Renderer.main');
 goog.require('Renderer.WebGL.Texture');
 goog.require('Renderer.WebGLRenderer');
 goog.require('Renderer.WebGL.ProgramLibrary');
+goog.require('Renderer.Mesh');
 
 Renderer.main = function() 
 {
@@ -34,15 +35,15 @@ Renderer.main = function()
 	/**
 	* Create a simple object.
 	*/
-/*	var mesh = new Renderer.Mesh();
-	mesh.setGeometry( new Renderer.Primitive.Triangle() );*/
+	var mesh = new Renderer.Mesh();
+	//mesh.setGeometry( new Renderer.Primitive.Triangle() );
 
 	/**
 	* Add mesh to the scene.
 	*/
 	// scene.add( mesh );
 
-	var program = Renderer.WebGL.ProgramLibrary.getInstance().getDefaultProgram();
+	//var program = Renderer.WebGL.ProgramLibrary.getInstance().getDefaultProgram();
 
 	/**
 	* Finally draw.
