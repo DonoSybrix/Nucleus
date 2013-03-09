@@ -182,6 +182,7 @@ Renderer.WebGL.Program.prototype.buildUniforms = function()
  */
 Renderer.WebGL.Program.prototype.enableAttributs = function() 
 {
+	console.log("plop");
 	var context   = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
 	var attributs = this.attributList.elements;
 

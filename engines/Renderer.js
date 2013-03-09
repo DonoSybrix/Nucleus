@@ -1,8 +1,10 @@
 goog.provide('Renderer.main');
+goog.require('Renderer.Geometric.Geometry');
 goog.require('Renderer.WebGL.Texture');
 goog.require('Renderer.WebGLRenderer');
 goog.require('Renderer.WebGL.ProgramLibrary');
 goog.require('Renderer.Mesh');
+
 
 Renderer.main = function() 
 {
@@ -38,12 +40,17 @@ Renderer.main = function()
 	var mesh = new Renderer.Mesh();
 	//mesh.setGeometry( new Renderer.Primitive.Triangle() );
 
+	var geometry = new Renderer.Geometric.Geometry();
+	geometry.setVertexPositionCount( 2 );
+	geometry.addVertexPosition( 0, 1, 2 );
+	geometry.addVertexPosition( 3, 4, 5 );
+
 	/**
 	* Add mesh to the scene.
 	*/
-	// scene.add( mesh );
+	scene.add( mesh );
 
-	//var program = Renderer.WebGL.ProgramLibrary.getInstance().getDefaultProgram();
+	var program = Renderer.WebGL.ProgramLibrary.getInstance().getDefaultProgram();
 
 	/**
 	* Finally draw.

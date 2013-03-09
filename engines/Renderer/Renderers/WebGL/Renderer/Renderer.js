@@ -73,26 +73,38 @@ Renderer.WebGLRenderer.prototype.render = function( scene, camera )
 };
 
 /**
+ * Fetch spacial chidren.
+ * @param {Renderer.Camera} camera Camera to use.
+ * @param {Renderer.Core.Spacial} spacial Spacial elemen to fetch.
+ * @param {Renderer.Mesh} mesh Mesh to draw.
+ */
+Renderer.WebGLRenderer.prototype.renderChildren = function( camera, spacial, children ) 
+{
+	// Check for submeshes.
+	var spacials = spacial.getChildren();
+	for( var i = 0, len = spacial.getChildrenCount(); i < len; ++i ) 
+	{
+		this.renderMesh( camera, /** @type {Renderer.Mesh} */(spacials[i]) );
+	}
+};
+
+/**
  * Draw a mesh with VBO.
  * @param {Renderer.Camera} camera Camera to use.
  * @param {Renderer.Mesh} mesh Mesh to draw.
  */
 Renderer.WebGLRenderer.prototype.renderMeshWithVBO = function( camera, mesh ) 
 {
-	/*this.cache.program.bind();
-	this.cache.program.sendCommonUniforms();
+	if( mesh.getMaterial() == null || mesh.getGeometry() == null )
+		return;
 
-	this.cache.program.enableAttributs();
-	this.cache.program.sendPersonalUniforms();*/
-};
+	// Set program to use.
+	this.cache.setProgram( mesh.getMaterial().getProgram() );
 
-/**
- * Draw a mesh without VBO.
- * @param {Renderer.Camera} camera Camera to use.
- * @param {Renderer.Mesh} mesh Mesh to draw.
- */
-Renderer.WebGLRenderer.prototype.renderMeshWithoutVBO = function( camera, mesh ) 
-{
+	// Enable Attributs.
+	var attributs = this.cache.program.getAttributList();
+
+	// Send model uniforms.
 
 };
 
@@ -104,15 +116,10 @@ Renderer.WebGLRenderer.prototype.renderMeshWithoutVBO = function( camera, mesh )
 Renderer.WebGLRenderer.prototype.renderMesh = function( camera, mesh ) 
 {
 	// Draw the mesh.
-	this.renderMeshWithoutVBO( camera, mesh );
+	this.renderMeshWithVBO( camera, mesh );
 
 	// Check for submeshes.
-	var spacials = mesh.getChildren();
-	for( var i = 0, len = mesh.getChildrenCount(); i < len; ++i ) 
-	{
-		this.renderMesh( camera,
-						 /** @type {Renderer.Mesh} */(spacials[i]) );
-	}
+	this.renderChildren( camera, mesh, mesh.getChildren() );
 };
 
 /**
@@ -122,14 +129,8 @@ Renderer.WebGLRenderer.prototype.renderMesh = function( camera, mesh )
  */
 Renderer.WebGLRenderer.prototype.rendering = function( scene, camera ) 
 {
-	var spacials = scene.getChildren();
-
 	// Iterate over elements.
-	for( var i = 0, len = scene.getChildrenCount(); i < len; ++i ) 
-	{
-		this.renderMesh( camera, 
-						 /** @type {Renderer.Mesh} */(spacials[i]) );
-	}
+	this.renderChildren( camera, scene, scene.getChildren() );
 
 	// Clear cache and previous bind.
 	this.cache.clear();

@@ -44,6 +44,7 @@ Renderer.WebGL.RendererCache.prototype.setProgram = function( program )
 	{
 		this.program = program;
 		this.program.bind();
+		this.program.setCommonUniforms();
 	}
 };
 
