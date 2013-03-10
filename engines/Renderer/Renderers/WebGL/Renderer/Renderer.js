@@ -76,15 +76,13 @@ Renderer.WebGLRenderer.prototype.render = function( scene, camera )
  * Fetch spacial chidren.
  * @param {Renderer.Camera} camera Camera to use.
  * @param {Renderer.Core.Spacial} spacial Spacial elemen to fetch.
- * @param {Renderer.Mesh} mesh Mesh to draw.
+ * @param {Array.<Renderer.Core.Spacial>} children List of chidren of the given spacial.
  */
 Renderer.WebGLRenderer.prototype.renderChildren = function( camera, spacial, children ) 
 {
-	// Check for submeshes.
-	var spacials = spacial.getChildren();
 	for( var i = 0, len = spacial.getChildrenCount(); i < len; ++i ) 
 	{
-		this.renderMesh( camera, /** @type {Renderer.Mesh} */(spacials[i]) );
+		this.renderMesh( camera, /** @type {Renderer.Mesh} */(children[i]) );
 	}
 };
 
@@ -98,14 +96,28 @@ Renderer.WebGLRenderer.prototype.renderMeshWithVBO = function( camera, mesh )
 	if( mesh.getMaterial() == null || mesh.getGeometry() == null )
 		return;
 
+	var material = mesh.getMaterial();
+	var program  = material.getProgram();
+
+	// Set comon uniforms values.
+	var uniforms 			= program.getUniformList().elements;
+	uniforms['uMvp'].data 	= camera.getMatrix();
+	uniforms['uModel'].data = mesh.getTransformable().getMatrix();
+
 	// Set program to use.
-	this.cache.setProgram( mesh.getMaterial().getProgram() );
+	this.cache.setProgram( program );
 
 	// Enable Attributs.
-	var attributs = this.cache.program.getAttributList();
+	this.cache.setGeometry( mesh.getGeometry() );
 
 	// Send model uniforms.
+	// this.cache.program.sendPersonalUniforms();
 
+	// Finally draw.
+    this.context.drawElements( 	material.getDrawingMode(), 
+    							this.cache.geometry.getIndiceCount(), 
+    							this.cache.geometryConfiguration.indexBuffer.getType(),
+    							0 ); 
 };
 
 /**
@@ -129,6 +141,9 @@ Renderer.WebGLRenderer.prototype.renderMesh = function( camera, mesh )
  */
 Renderer.WebGLRenderer.prototype.rendering = function( scene, camera ) 
 {
+	// Set view port.	
+    this.context.viewport( camera.viewport.x, camera.viewport.y, camera.viewport.width, camera.viewport.height );
+
 	// Iterate over elements.
 	this.renderChildren( camera, scene, scene.getChildren() );
 

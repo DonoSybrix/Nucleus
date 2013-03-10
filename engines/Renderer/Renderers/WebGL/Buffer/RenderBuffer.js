@@ -22,7 +22,7 @@ Renderer.WebGL.RendererBuffer = function()
 goog.inherits( Renderer.WebGL.RendererBuffer, Renderer.WebGL.Buffer );
 
 /**
- * Bind the buffer. 
+ * Bind the buffer.
  * @override
  */
 Renderer.WebGL.RendererBuffer.prototype.bind = function() 

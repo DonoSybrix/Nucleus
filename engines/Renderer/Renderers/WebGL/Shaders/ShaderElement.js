@@ -52,24 +52,10 @@ Renderer.WebGL.ShaderElement = function()
 	this.normalize = false;
 
 	/**
-	* Offset for this attribut in the attributs list.
-	* @type {number}
-	* @public
-	*/
-	this.offset = 0;
-
-	/**
 	* Precision.
 	* @type {WebGL.Program.TypePrecision}
 	* @public
 	*/
 	this.precision = WebGL.Program.TypePrecision.LOW;
-
-	/**
-	* Type of data.
-	* @type {WebGL.Program.Type}
-	* @public
-	*/
-	this.type = WebGL.Program.Type.INT;
 
 };

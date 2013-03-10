@@ -1,5 +1,6 @@
 goog.provide('Renderer.WebGL.RendererCache');
 goog.require('Renderer.WebGL.Program');
+goog.require('Renderer.WebGL.GeometryConfiguration');
 goog.require('Renderer.WebGL.Texture');
 
 /**
@@ -9,6 +10,18 @@ goog.require('Renderer.WebGL.Texture');
  */
 Renderer.WebGL.RendererCache = function() 
 {
+	/**
+	* Last geometry binded.
+	* @type {Renderer.Geometric.Geometry}
+	*/
+	this.geometry = null;
+
+	/**
+	* Last geometry configuration binded.
+	* @type {Renderer.WebGL.GeometryConfiguration}
+	*/
+	this.geometryConfiguration = null;
+
 	/**
 	* Last Program binded.
 	* @type {Renderer.WebGL.Program|null}
@@ -30,8 +43,29 @@ Renderer.WebGL.RendererCache = function()
 */
 Renderer.WebGL.RendererCache.prototype.clear = function() 
 {
-	this.program = null;
-	this.texture = null;
+	this.program  = null;
+	this.texture  = null;
+	this.geometry = null;
+};
+
+
+/**
+* Change geometry in cache.
+* @param {Renderer.Geometric.Geometry} geometry Geometry to use.
+*/
+Renderer.WebGL.RendererCache.prototype.setGeometry = function( geometry ) 
+{
+	if( geometry != this.geometry )
+	{
+		this.geometry 				= geometry;
+		this.geometryConfiguration 	= /** @type {Renderer.WebGL.GeometryConfiguration} */(this.geometry.getConfiguration());
+
+		if( this.geometry.isDirty() ) {
+			// this.geometry.update();
+		}
+
+		this.geometry.bind( this.program.getAttributList().elements );
+	}
 };
 
 /**
@@ -44,7 +78,7 @@ Renderer.WebGL.RendererCache.prototype.setProgram = function( program )
 	{
 		this.program = program;
 		this.program.bind();
-		this.program.setCommonUniforms();
+		this.program.sendCommonUniforms();
 	}
 };
 

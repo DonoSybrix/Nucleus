@@ -6,24 +6,28 @@ goog.require('Renderer.Materials.Material');
 /**
  * A mesh: An element to decorate with material and geometry.
  * @constructor
+ * @param {Renderer.Geometric.Geometry} geometry Geometry to use.
+ * @param {Renderer.Materials.Material} material Material to use.
  * @extends Renderer.Core.Spacial
  * @author Donovan ORHAN <dono@sybrix.fr>
  */
-Renderer.Mesh = function() 
+Renderer.Mesh = function( geometry, material ) 
 {
+    Renderer.Core.Spacial.call( this );
+
     /**
     * Mesh's geometry.
     * @type {Renderer.Geometric.Geometry}
     * @private
     */
-    this.geometry = null;
+    this.geometry = geometry;
 
     /**
     * Material used by the mesh.
     * @type {Renderer.Materials.Material}
     * @private
     */
-    this.material = null;
+    this.material = material;
 
 };
 goog.inherits( Renderer.Mesh, Renderer.Core.Spacial );

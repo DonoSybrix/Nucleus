@@ -46,13 +46,6 @@ Renderer.WebGL.Program = function()
 	*/
 	this.vertexShader = new Renderer.WebGL.Shader( Renderer.WebGL.Shader.Type.VERTEX );
 
-	/**
-	* Total size, in bytes, of the attributs.
-	* @type {number}
-	* @public
-	*/
-	this.attibutsStructureSize = 0;
-
 };
 
 /**
@@ -131,31 +124,13 @@ Renderer.WebGL.Program.prototype.build = function()
  */
 Renderer.WebGL.Program.prototype.buildAttributs = function() 
 {
-	var context 	  = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
+	var context   = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
 	var attributs = this.attributList.elements;
 
 	for( var i in attributs )
 	{
 		var attribut = attributs[i];
 		attribut.id  = context.getAttribLocation( this.id, i );
-
-		// Attribut not find in the shader? Ignore it.
-		if( attribut.id == -1) 
-		{
-			continue;
-		}
-
-		/** 
-		* Calculate type's size.
-		* @type {number}
-		*/
-		var typeSize = (attribut.type == WebGL.Program.Type.FLOAT) ? 4 : 3;
-
-		// Calculate offset.
-		attribut.offset = this.attibutsStructureSize;
-
-		// Calculate total size.
-		this.attibutsStructureSize += (attribut.count * typeSize);
 	}
 };
 
@@ -174,27 +149,6 @@ Renderer.WebGL.Program.prototype.buildUniforms = function()
     	if( uniforms[i].id == null) {
     		uniforms[i].id = -1;
     	}
-	}
-};
-
-/**
- * Enable attributs.
- */
-Renderer.WebGL.Program.prototype.enableAttributs = function() 
-{
-	console.log("plop");
-	var context   = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
-	var attributs = this.attributList.elements;
-
-	for( var i in attributs )
-    {
-		if( attributs[i].id == -1 ) {
-			continue;
-		}
-
-		var attribut = attributs[i];
-		context.enableVertexAttribArray( /** @type {number} */(attribut.id) );
-		context.vertexAttribPointer( /** @type {number} */(attribut.id), attribut.count, attribut.itemType, attribut.normalize, this.attibutsStructureSize, attribut.offset );
 	}
 };
 

@@ -1,6 +1,13 @@
 goog.provide('Renderer.Geometric.GeometryConfiguration');
 
 /**
+ * Used to define a geometric configuration (attributs offset).
+ * @constructor
+ * @author Donovan ORHAN <dono@sybrix.fr>
+ */
+Renderer.Geometric.GeometryConfiguration = function() { };
+
+/**
  * Element count per vertex (x, y, z).
  * @const
  * @type {number}

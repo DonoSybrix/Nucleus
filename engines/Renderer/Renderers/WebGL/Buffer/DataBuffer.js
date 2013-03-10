@@ -1,4 +1,4 @@
-goog.provide('Renderer.WebGL.VertexBuffer');
+goog.provide('Renderer.WebGL.DataBuffer');
 goog.require('Renderer.WebGL.Buffer');
 
 /**
@@ -14,7 +14,7 @@ Renderer.WebGL.DataBuffer = function()
     /**
     * Id of the buffer.
     * @type {WebGLBuffer}
-    * @public
+    * @protected
     */
     this.id = this.contextReference.createBuffer();
 
@@ -32,7 +32,7 @@ Renderer.WebGL.DataBuffer.prototype.bind = function()
 
 /**
  * Fill the buffer. 
- * @param {ArrayBuffer} data Array with the data.
+ * @param {ArrayBuffer|Uint8Array|Uint16Array|Uint32Array} data Array with the data.
  * @override
  */
 Renderer.WebGL.DataBuffer.prototype.fill = function( data ) 

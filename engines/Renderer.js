@@ -1,5 +1,6 @@
 goog.provide('Renderer.main');
 goog.require('Renderer.Geometric.Geometry');
+goog.require('Renderer.PrimitiveBuilder');
 goog.require('Renderer.WebGL.Texture');
 goog.require('Renderer.WebGLRenderer');
 goog.require('Renderer.WebGL.ProgramLibrary');
@@ -16,7 +17,10 @@ Renderer.main = function()
 	/**
 	* Create a camera.
 	*/
-	var camera = new Renderer.Camera("3D");
+	var camera = new Renderer.Camera("3D" );
+    camera.setPosition( 0, 0, 2 );
+    camera.lookAt( 0, 0, -5 );
+    camera.setPosition( 0, 0, 0 );
 
 	/**
 	* Create a scene.
@@ -37,13 +41,10 @@ Renderer.main = function()
 	/**
 	* Create a simple object.
 	*/
-	var mesh = new Renderer.Mesh();
-	//mesh.setGeometry( new Renderer.Primitive.Triangle() );
+	var mesh = new Renderer.Mesh( 	Renderer.PrimitiveBuilder.Plane(), 
+									new Renderer.Materials.Material() );
 
-	var geometry = new Renderer.Geometric.Geometry();
-	geometry.setVertexPositionCount( 2 );
-	geometry.addVertexPosition( 0, 1, 2 );
-	geometry.addVertexPosition( 3, 4, 5 );
+        mesh.transformable.setScale( 1, 1, 1 );
 
 	/**
 	* Add mesh to the scene.

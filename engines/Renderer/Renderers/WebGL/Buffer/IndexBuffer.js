@@ -24,13 +24,13 @@ Renderer.WebGL.IndexBuffer = function()
     * @type {number}
     * @protected
     */
-    this.type = this.setType( Renderer.Geometric.GeometryConfiguration.GeometryType.LOW );
+    this.type = goog.webgl.UNSIGNED_BYTE;
 
 };
 goog.inherits( Renderer.WebGL.IndexBuffer, Renderer.WebGL.Buffer );
 
 /**
- * Bind the buffer. 
+ * Bind the buffer.
  * @override
  */
 Renderer.WebGL.IndexBuffer.prototype.bind = function() 
@@ -40,7 +40,7 @@ Renderer.WebGL.IndexBuffer.prototype.bind = function()
 
 /**
  * Fill the buffer. 
- * @param {ArrayBuffer} data Array with the data.
+ * @param {ArrayBuffer|Uint8Array|Uint16Array|Uint32Array} data Array with the data.
  * @override
  */
 Renderer.WebGL.IndexBuffer.prototype.fill = function( data ) 
@@ -50,15 +50,24 @@ Renderer.WebGL.IndexBuffer.prototype.fill = function( data )
 };
 
 /**
+ * Get type of data used by the buffer.
+ * @return {number} Indice type.
+ */
+Renderer.WebGL.IndexBuffer.prototype.getType = function() 
+{
+   return this.type;
+};
+
+/**
  * Set type of data used by the buffer.
  * @param {Renderer.Geometric.GeometryConfiguration.GeometryType} type Type of geometry.
  */
 Renderer.WebGL.IndexBuffer.prototype.setType = function( type ) 
 {
-    if( type == Renderer.Geometric.GeometryConfiguration.GeometryType.LOW ) {
+    if( type == Renderer.Geometric.GeometryConfiguration.GeometryType.SMALL ) {
         this.type = goog.webgl.UNSIGNED_BYTE;
     }
-    else if( type == Renderer.Geometric.GeometryConfiguration.GeometryType.SMALL ) {
+    else if( type == Renderer.Geometric.GeometryConfiguration.GeometryType.MEDIUM ) {
         this.type = goog.webgl.UNSIGNED_SHORT;
     }
     else {

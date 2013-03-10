@@ -84,3 +84,12 @@ Renderer.Core.Spacial.prototype.getParent = function()
 {
     return this.parent;
 };
+
+/**
+ * Return the element transformable.
+ * @return {Core.Transformable} A reference to the transformable.
+ */
+Renderer.Core.Spacial.prototype.getTransformable = function() 
+{
+    return this.transformable;
+};

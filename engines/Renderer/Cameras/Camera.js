@@ -42,6 +42,13 @@ Renderer.Camera = function( cameraType )
     this.up = goog.vec.Vec3.createFloat32FromValues( 0.0, 1.0, 0.0 );
 
     /**
+    * Viewport dimensions.
+    * @type {Object}
+    * @public
+    */
+    this.viewport = { x: 0, y: 0, width: 800, height: 600 };
+
+    /**
     * Set the default type.
     */
     this.changeType( cameraType );
@@ -125,9 +132,21 @@ Renderer.Camera.prototype.changeType = function( type )
             break;
         case '3D':
         default:
-            this.makePerspective( 45, 800 / 600, 1, 100 );
+            this.makePerspective( 45, this.viewport.width / this.viewport.height, 1, 100 );
             break;
     }
+};
+
+/**
+ * Change camera viewport.
+ * @param {number} x  Position on X.
+ * @param {number} y  Position on Y.
+ * @param {number} width  Width.
+ * @param {number} height Height.
+ */
+Renderer.Camera.prototype.setViewport = function( x, y, width, height ) 
+{
+    this.viewport = { x: x, y: y, width: width, height: height };
 };
 
 /**

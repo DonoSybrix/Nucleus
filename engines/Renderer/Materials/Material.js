@@ -1,5 +1,6 @@
 goog.provide('Renderer.Materials.Material');
 goog.require('Renderer.Core.Color');
+goog.require('goog.webgl');
 
 /**
  * Material: Used to define a mesh's apparence.
@@ -41,7 +42,7 @@ Renderer.Materials.Material = function()
     * @type {Renderer.WebGL.Program|null}
     * @protected
     */
-    this.program = null;
+    this.program = Renderer.WebGL.ProgramLibrary.getInstance().getDefaultProgram();
 
     /**
     * Shininess.
@@ -243,3 +244,20 @@ Renderer.Materials.Material.prototype.show = function()
     this.visible = true;
 };
 
+/**
+ * Return the material drawing mode.
+ * @return {number} Drawing mode.
+ */
+Renderer.Materials.Material.prototype.getDrawingMode = function() 
+{
+    return this.drawingMode;
+};
+
+/**
+ * Return the program used by this material.
+ * @return {Renderer.WebGL.Program|null} A reference to the program.
+ */
+Renderer.Materials.Material.prototype.getProgram = function() 
+{
+    return this.program;
+};

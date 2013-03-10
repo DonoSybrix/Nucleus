@@ -9,6 +9,13 @@ goog.require('Renderer.Geometric.GeometryConfiguration');
 Renderer.Geometric.Geometry = function() 
 {
     /**
+    * Configuration of the geometry.
+    * @type {Renderer.Geometric.GeometryConfiguration|null}
+    * @private
+    */
+    this.configuration = null;
+
+    /**
     * List of indices.
     * @type {Uint8Array|Uint16Array|Uint32Array|null}
     * @private
@@ -21,6 +28,20 @@ Renderer.Geometric.Geometry = function()
     * @private
     */
     this.indiceCount = 0;
+
+    /**
+    * Create the geometry with an interleaved array.
+    * @type {boolean}
+    * @private
+    */
+    this.interleaved = false;
+
+    /**
+    * Indicate if the geometry need an update.
+    * @type {boolean}
+    * @private
+    */
+    this.needUpdate = false;
 
     /**
     * List of normals.
@@ -119,11 +140,120 @@ Renderer.Geometric.Geometry.prototype.addVertexTextureCoordinates = function( x,
 };
 
 /**
+ * Bind the geometry attributs [WebGL only].
+ * @param {Array.<Object>} programAttributList List of attributs of the shader.
+ */
+Renderer.Geometric.Geometry.prototype.bind = function( programAttributList ) 
+{
+    this.configuration.bindGeometry( programAttributList );
+};
+
+/**
  * Build the geometry array.
  */
 Renderer.Geometric.Geometry.prototype.build = function() 
 {
-    // this.vertices = new ArrayBuffer();
+    this.configuration = new Renderer.WebGL.GeometryConfiguration();
+
+    // Calculate array size/array configuration.
+    var hasNormals = (this.normalCount > 0);
+    var hasTexture = (this.textureCoordinateCount > 0);
+
+    // Array size.
+    var vertexSize = 0;
+    vertexSize += Renderer.Geometric.GeometryConfiguration.ElementLength.POSITION;
+    vertexSize += Renderer.Geometric.GeometryConfiguration.ElementLength.COLOR;
+
+    if( hasNormals )
+    {
+        vertexSize += Renderer.Geometric.GeometryConfiguration.ElementLength.NORMAL;
+    }
+
+    if( hasTexture )
+    {
+        vertexSize += Renderer.Geometric.GeometryConfiguration.ElementLength.TEXTURE;
+    }
+
+    // Create interleaved array.
+    if( this.interleaved )
+    {
+        this.vertices = new ArrayBuffer( vertexSize );
+
+        this.configuration.setAsInterleaved( this.vertices, this.indices, Renderer.Geometric.GeometryConfiguration.GeometryType.SMALL );
+    }
+    else
+    {
+        this.configuration.setAsNormal( this.indices, Renderer.Geometric.GeometryConfiguration.GeometryType.SMALL );
+
+        this.configuration.add( 'aPosition', 
+                                Renderer.Geometric.GeometryConfiguration.DATACOUNT_POSITION, 
+                                goog.webgl.FLOAT,
+                                0,
+                                Renderer.Geometric.GeometryConfiguration.ElementLength.POSITION,
+                                this.positions );
+
+        this.configuration.add( 'aColor', 
+                                Renderer.Geometric.GeometryConfiguration.DATACOUNT_COLOR, 
+                                goog.webgl.UNSIGNED_BYTE,
+                                0,
+                                Renderer.Geometric.GeometryConfiguration.ElementLength.COLOR,
+                                this.positions );
+
+        if( hasTexture )
+        {
+            this.configuration.add( 'Texture', 
+                                    Renderer.Geometric.GeometryConfiguration.DATACOUNT_TEXTURE, 
+                                    goog.webgl.FLOAT,
+                                    0,
+                                    Renderer.Geometric.GeometryConfiguration.ElementLength.TEXTURE,
+                                    this.textureCoordinates );
+        }
+
+        if( hasNormals )
+        {
+            this.configuration.add( 'Normal', 
+                                    Renderer.Geometric.GeometryConfiguration.DATACOUNT_NORMAL, 
+                                    goog.webgl.FLOAT,
+                                    0,
+                                    Renderer.Geometric.GeometryConfiguration.ElementLength.NORMAL,
+                                    this.normals );
+        }
+    }
+};
+
+/**
+ * Indicate if the geometry is dirty (waiting for update).
+ * @return {boolean} State of the geometry.
+ */
+Renderer.Geometric.Geometry.prototype.isDirty = function() 
+{
+    return this.needUpdate;
+};
+
+/**
+ * Update the geometry.
+ */
+Renderer.Geometric.Geometry.prototype.update = function() 
+{
+
+};
+
+/**
+ * Return geometry configuration.
+ * @return {Renderer.Geometric.GeometryConfiguration} A reference to the configuration.
+ */
+Renderer.Geometric.Geometry.prototype.getConfiguration = function() 
+{
+    return this.configuration;
+};
+
+/**
+ * Return indices count.
+ * @return {number} Indices count.
+ */
+Renderer.Geometric.Geometry.prototype.getIndiceCount = function() 
+{
+    return this.indiceCount;
 };
 
 /**

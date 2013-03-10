@@ -25,19 +25,19 @@ Renderer.WebGL.Buffer = function()
     /**
     * A reference to the renderering context (Optimisation).
     * @type {WebGLRenderingContext}
-    * @protected
+    * @public
     */
     this.contextReference = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
 
 };
 
 /**
- * Bind the buffer. 
+ * Bind the buffer.
  */
-Mango.Core.Buffer.prototype.bind = function() { };
+Renderer.WebGL.Buffer.prototype.bind = function() { };
 
 /**
  * Fill the buffer. 
- * @param {ArrayBuffer} data Array with the data.
+ * @param {ArrayBuffer|Uint8Array|Uint16Array|Uint32Array} data Array with the data.
  */
-Mango.Core.Buffer.prototype.fill = function( data ) { };
+Renderer.WebGL.Buffer.prototype.fill = function( data ) { };
