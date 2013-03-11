@@ -3,7 +3,7 @@ goog.require('Renderer.Mesh');
 goog.require('Renderer.Renderer');
 goog.require('Renderer.WebGL.ContextManager');
 goog.require('Renderer.WebGL.TextureFactory');
-goog.require('Renderer.WebGL.RendererCache');
+goog.require('Renderer.WebGL.RendererHelper');
 
 /**
  * The WebGL renderer.
@@ -29,11 +29,11 @@ Renderer.WebGLRenderer = function( canvas )
 	this.textureFactory = new Renderer.WebGL.TextureFactory( this.context );
 
 	/**
-	* Cache used by the renderer.
-	* @type {Renderer.WebGL.RendererCache}
+	* Helper/cache used by the renderer.
+	* @type {Renderer.WebGL.RendererHelper}
 	* @private
 	*/
-	this.cache = new Renderer.WebGL.RendererCache();
+	this.helper = new Renderer.WebGL.RendererHelper();
 
 };
 
@@ -100,23 +100,22 @@ Renderer.WebGLRenderer.prototype.renderMeshWithVBO = function( camera, mesh )
 	var program  = material.getProgram();
 
 	// Set comon uniforms values.
-	var uniforms 			= program.getUniformList().elements;
-	uniforms['uMvp'].data 	= camera.getMatrix();
+	var uniforms 			= program.getCommonUniforms();
 	uniforms['uModel'].data = mesh.getTransformable().getMatrix();
 
 	// Set program to use.
-	this.cache.setProgram( program );
+	this.helper.useProgram( program, camera );
 
 	// Enable Attributs.
-	this.cache.setGeometry( mesh.getGeometry() );
+	this.helper.useGeometry( mesh.getGeometry() );
 
 	// Send model uniforms.
 	// this.cache.program.sendPersonalUniforms();
 
 	// Finally draw.
     this.context.drawElements( 	material.getDrawingMode(), 
-    							this.cache.geometry.getIndiceCount(), 
-    							this.cache.geometryConfiguration.indexBuffer.getType(),
+    							this.helper.geometry.getIndiceCount(), 
+    							this.helper.geometryConfiguration.indexBuffer.getType(),
     							0 ); 
 };
 
@@ -148,7 +147,7 @@ Renderer.WebGLRenderer.prototype.rendering = function( scene, camera )
 	this.renderChildren( camera, scene, scene.getChildren() );
 
 	// Clear cache and previous bind.
-	this.cache.clear();
+	this.helper.clear();
 };
 
 /**

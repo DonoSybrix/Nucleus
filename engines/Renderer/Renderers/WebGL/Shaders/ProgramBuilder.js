@@ -1,5 +1,6 @@
 goog.provide('Renderer.WebGL.ProgramBuilder');
 goog.require('Renderer.WebGL.Program');
+goog.require('Renderer.WebGL.ShaderDefinition');
 goog.require('Nucleus.ErrorManager');
 
 /**
@@ -10,6 +11,13 @@ goog.require('Nucleus.ErrorManager');
  */
 Renderer.WebGL.ProgramBuilder = function( program ) 
 {
+	/**
+	* List of attributs.
+	* @type {Renderer.WebGL.ShaderDefinition}
+	* @private
+	*/
+	this.attributList = new Renderer.WebGL.ShaderDefinition();
+
 	/**
 	* Code to put inside the fragment main.
 	* @type {string}
@@ -37,6 +45,13 @@ Renderer.WebGL.ProgramBuilder = function( program )
 	* @private
 	*/
 	this.structureList = [];
+
+	/**
+	* List of uniforms.
+	* @type {Renderer.WebGL.ShaderDefinition}
+	* @private
+	*/
+	this.uniformList = new Renderer.WebGL.ShaderDefinition();
 
 	/**
 	* Indicate if the shader will use lighting.
@@ -76,15 +91,43 @@ Renderer.WebGL.ProgramBuilder = function( program )
 Renderer.WebGL.ProgramBuilder.LIGHTS_MAX = 14;
 
 /**
+ * Add an attribut.
+ * @param {string} name Name of the element.
+ * @param {number} count Number of element given.
+ * @param {WebGL.Program.Type} type Type of the element.
+ * @param {WebGL.Program.TypePrecision=} precision Precision of the type [optional].
+ * @private
+ */
+Renderer.WebGL.ProgramBuilder.prototype.addAttribut = function( name, count, type, precision ) 
+{
+	this.attributList.add( name, count, type, precision );
+	this.program.addAttribut( name, type );
+};
+
+/**
+ * Add uniform.
+ * @param {string} name Name of the element.
+ * @param {number} count Number of element given.
+ * @param {WebGL.Program.Type} type Type of the element.
+ * @param {WebGL.Program.TypePrecision=} precision Precision of the type [optional].
+ * @private
+ */
+Renderer.WebGL.ProgramBuilder.prototype.addUniform = function( name, count, type, precision ) 
+{
+	this.uniformList.add( name, count, type, precision );
+	this.program.addCommonUniform( name, type );
+};
+
+/**
  * Add default attributs.
  * @private
  */
 Renderer.WebGL.ProgramBuilder.prototype.addDefaultAttributs = function() 
 {
-	this.program.addAttribut('aPosition', 	3, WebGL.Program.Type.VEC3 );
-	this.program.addAttribut('aColor', 	 	4, WebGL.Program.Type.VEC4 );
-	this.program.addAttribut('aTexCoord', 	2, WebGL.Program.Type.VEC2 );
-	this.program.addAttribut('aNormal', 	3, WebGL.Program.Type.VEC3 );
+	this.addAttribut('aPosition', 	3, WebGL.Program.Type.VEC3 );
+	this.addAttribut('aColor', 	 	4, WebGL.Program.Type.VEC4 );
+	this.addAttribut('aTexCoord', 	2, WebGL.Program.Type.VEC2 );
+	this.addAttribut('aNormal', 	3, WebGL.Program.Type.VEC3 );
 };
 
 /**
@@ -96,15 +139,15 @@ Renderer.WebGL.ProgramBuilder.prototype.addDefaultUniforms = function()
     	Nucleus.ErrorManager.error('Program is null, ProgramBuilder can\'t add default uniforms.');
 	}
 
-	this.program.addUniform('uMvp', 		 1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
-	this.program.addUniform('uModel', 		 1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
-	this.program.addUniform('uAmbientLight', 1, WebGL.Program.Type.VEC3 );
+	this.addUniform('uMvp', 		 1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
+	this.addUniform('uModel', 		 1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
+	this.addUniform('uAmbientLight', 1, WebGL.Program.Type.VEC3 );
 
 	if( this.useMaterial )
 	{
 		var materialUniformName = 'uMaterial';
 
-		this.program.addUniform( materialUniformName, 1, WebGL.Program.Type.STRUCTURE );
+		this.addUniform( materialUniformName, 1, WebGL.Program.Type.STRUCTURE );
 
 		// Add material data.		
 	/*	var materialStructure = this.program.getUniformList().elements[materialUniformName];
@@ -117,7 +160,7 @@ Renderer.WebGL.ProgramBuilder.prototype.addDefaultUniforms = function()
 	if( this.useLight )
 	{
 		var lightsUniformName = 'uLight';
-		this.program.addUniform(lightsUniformName, Renderer.WebGL.ProgramBuilder.LIGHTS_MAX, WebGL.Program.Type.STRUCTURE );
+		this.addUniform(lightsUniformName, 1, WebGL.Program.Type.STRUCTURE );
 
 		// Add light one per one as a "sub-uniform".
 		/*var lightStructure = this.program.getUniformList().elements[lightsUniformName];
@@ -254,7 +297,7 @@ Renderer.WebGL.ProgramBuilder.prototype.computeAttributs = function( isFragment 
 	var categorieName = (isFragment == false) ? 'attribute' : 'varying';
 
 	var string 		= this.addSection( categorieName + 's');
-	var attributs 	= this.program.getAttributList().getElements();
+	var attributs 	= this.attributList.getElements();
 
 	for( var i in attributs ) 
 	{
@@ -313,7 +356,7 @@ Renderer.WebGL.ProgramBuilder.prototype.computeUniforms = function()
 	var categorieName = 'uniform';
 	var type 	  	  = null;
 	var array		  = '';
-	var uniforms  	  = this.program.getUniformList().getElements();	
+	var uniforms  	  = this.uniformList.getElements();	
 
 	for( var i in uniforms ) 
 	{

@@ -1,6 +1,8 @@
 goog.provide('Renderer.WebGL.Program');
+goog.require('Renderer.WebGL.AttributDefinition');
 goog.require('Renderer.WebGL.Shader');
 goog.require('Renderer.WebGL.ShaderDefinition');
+goog.require('Renderer.WebGL.UniformDefinition');
 goog.require('Nucleus.ErrorManager');
 
 /**
@@ -13,10 +15,17 @@ Renderer.WebGL.Program = function()
 
 	/**
 	* List of attributs.
-	* @type {Renderer.WebGL.ShaderDefinition}
+	* @type {Array.<string, Renderer.WebGL.AttributDefinition>}
 	* @private
 	*/
-	this.attributList = new Renderer.WebGL.ShaderDefinition();
+	this.attributs = [];
+
+	/**
+	* List of uniforms.
+	* @type {Array.<string, Renderer.WebGL.UniformDefinition>}
+	* @private
+	*/
+	this.commonUniforms = [];
 
 	/**
 	* The fragment shader.
@@ -34,10 +43,10 @@ Renderer.WebGL.Program = function()
 
 	/**
 	* List of uniforms.
-	* @type {Renderer.WebGL.ShaderDefinition}
+	* @type {Array.<string, Renderer.WebGL.UniformDefinition>}
 	* @private
 	*/
-	this.uniformList = new Renderer.WebGL.ShaderDefinition();
+	this.modelUniforms = [];
 
 	/**
 	* The vertex shader.
@@ -51,25 +60,46 @@ Renderer.WebGL.Program = function()
 /**
  * Add an attribut.
  * @param {string} name Name of the element.
- * @param {number} count Number of element given.
  * @param {WebGL.Program.Type} type Type of the element.
- * @param {WebGL.Program.TypePrecision=} precision Precision of the type [optional].
  */
-Renderer.WebGL.Program.prototype.addAttribut = function( name, count, type, precision ) 
+Renderer.WebGL.Program.prototype.addAttribut = function( name, type ) 
 {
-	this.attributList.add( name, count, type, precision );
+	var attribut  = new Renderer.WebGL.AttributDefinition();
+	this.attributs[name] = attribut;
 };
 
 /**
  * Add uniform.
- * @param {string} name Name of the element.
- * @param {number} count Number of element given.
  * @param {WebGL.Program.Type} type Type of the element.
- * @param {WebGL.Program.TypePrecision=} precision Precision of the type [optional].
+ * @return {Renderer.WebGL.UniformDefinition} A reference to the fresh uniform.
+ * @private
  */
-Renderer.WebGL.Program.prototype.addUniform = function( name, count, type, precision ) 
+Renderer.WebGL.Program.prototype.addUniform = function( type ) 
 {
-	this.uniformList.add( name, count, type, precision );
+	var uniform  = new Renderer.WebGL.UniformDefinition();
+	uniform.type = type;
+
+	return uniform;
+};
+
+/**
+ * Add a model uniform.
+ * @param {string} name Name of the element.
+ * @param {WebGL.Program.Type} type Type of the element.
+ */
+Renderer.WebGL.Program.prototype.addCommonUniform = function( name, type ) 
+{
+	this.commonUniforms[name] = this.addUniform( type );
+};
+
+/**
+ * Add a model uniform.
+ * @param {string} name Name of the element.
+ * @param {WebGL.Program.Type} type Type of the element.
+ */
+Renderer.WebGL.Program.prototype.addModelUniform = function( name, type ) 
+{
+	this.modelUniforms[name] = this.addUniform( type );
 };
 
 /**
@@ -125,7 +155,7 @@ Renderer.WebGL.Program.prototype.build = function()
 Renderer.WebGL.Program.prototype.buildAttributs = function() 
 {
 	var context   = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
-	var attributs = this.attributList.elements;
+	var attributs = this.attributs;
 
 	for( var i in attributs )
 	{
@@ -140,8 +170,8 @@ Renderer.WebGL.Program.prototype.buildAttributs = function()
 Renderer.WebGL.Program.prototype.buildUniforms = function() 
 {
 	var context  = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
-	var uniforms = this.uniformList.elements;
 
+	var uniforms = this.commonUniforms;
     for( var i in uniforms ) 
     {
     	uniforms[i].id = context.getUniformLocation( this.id, i );
@@ -157,15 +187,15 @@ Renderer.WebGL.Program.prototype.buildUniforms = function()
  */
 Renderer.WebGL.Program.prototype.sendCommonUniforms = function() 
 {
-	this.sendUniforms( this.uniformList.elements );
+	this.sendUniforms( this.commonUniforms );
 };
 
 /**
  * Send personal uniforms (model, material, …) shortcut for the user.
  */
-Renderer.WebGL.Program.prototype.sendPersonalUniforms = function() 
+Renderer.WebGL.Program.prototype.sendModelUniforms = function() 
 {
-	// this.sendUniforms( this.uniformList.elements );
+	this.sendUniforms( this.modelUniforms );
 };
 
 /**
@@ -257,21 +287,21 @@ Renderer.WebGL.Program.prototype.loadFromSources = function( vertexSource, fragm
 };
 
 /**
- * Return the program attributs.
- * @return {Renderer.WebGL.ShaderDefinition} A reference to the program attributs object.
+ * Return program attributs.
+ * @return {Array.<string, Renderer.WebGL.AttributDefinition>} A reference to the program attributs.
  */
-Renderer.WebGL.Program.prototype.getAttributList = function() 
+Renderer.WebGL.Program.prototype.getAttributs = function() 
 {
-	return this.attributList;
+	return this.attributs;
 };
 
 /**
- * Return the program list of uniforms.
- * @return {Renderer.WebGL.ShaderDefinition} A reference to the program uniforms object.
+ * Return common uniforms.
+ * @return {Array.<string, Renderer.WebGL.UniformDefinition>} A reference to the common uniforms.
  */
-Renderer.WebGL.Program.prototype.getUniformList = function() 
+Renderer.WebGL.Program.prototype.getCommonUniforms = function() 
 {
-	return this.uniformList;
+	return this.commonUniforms;
 };
 
 /**
@@ -281,4 +311,13 @@ Renderer.WebGL.Program.prototype.getUniformList = function()
 Renderer.WebGL.Program.prototype.getId = function() 
 {
 	return this.id;
+};
+
+/**
+ * Return model uniforms.
+ * @return {Array.<string, Renderer.WebGL.UniformDefinition>} A reference to the model uniforms.
+ */
+Renderer.WebGL.Program.prototype.getModelUniforms = function() 
+{
+	return this.modelUniforms;
 };

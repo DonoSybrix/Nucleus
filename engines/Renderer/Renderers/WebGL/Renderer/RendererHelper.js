@@ -1,14 +1,14 @@
-goog.provide('Renderer.WebGL.RendererCache');
+goog.provide('Renderer.WebGL.RendererHelper');
 goog.require('Renderer.WebGL.Program');
 goog.require('Renderer.WebGL.GeometryConfiguration');
 goog.require('Renderer.WebGL.Texture');
 
 /**
- * The WebGL renderer cache.
+ * The WebGL renderer helper/cache.
  * @constructor
  * @author Donovan ORHAN <dono@sybrix.fr>
  */
-Renderer.WebGL.RendererCache = function() 
+Renderer.WebGL.RendererHelper = function() 
 {
 	/**
 	* Last geometry binded.
@@ -41,7 +41,7 @@ Renderer.WebGL.RendererCache = function()
 /**
 * Clear cache.
 */
-Renderer.WebGL.RendererCache.prototype.clear = function() 
+Renderer.WebGL.RendererHelper.prototype.clear = function() 
 {
 	this.program  = null;
 	this.texture  = null;
@@ -53,7 +53,7 @@ Renderer.WebGL.RendererCache.prototype.clear = function()
 * Change geometry in cache.
 * @param {Renderer.Geometric.Geometry} geometry Geometry to use.
 */
-Renderer.WebGL.RendererCache.prototype.setGeometry = function( geometry ) 
+Renderer.WebGL.RendererHelper.prototype.useGeometry = function( geometry ) 
 {
 	if( geometry != this.geometry )
 	{
@@ -64,20 +64,28 @@ Renderer.WebGL.RendererCache.prototype.setGeometry = function( geometry )
 			// this.geometry.update();
 		}
 
-		this.geometry.bind( this.program.getAttributList().elements );
+		this.geometry.bind( this.program.getAttributs() );
 	}
 };
 
 /**
 * Change program in cache.
 * @param {Renderer.WebGL.Program} program Program to use.
+* @param {Renderer.Camera} camera Camera used by the renderer.
 */
-Renderer.WebGL.RendererCache.prototype.setProgram = function( program ) 
+Renderer.WebGL.RendererHelper.prototype.useProgram = function( program, camera  ) 
 {
 	if( program != this.program )
 	{
+		// Cache + bind.
 		this.program = program;
 		this.program.bind();
+
+		// Set common uniforms values.
+		var uniforms 			= this.program.getCommonUniforms();
+		uniforms['uMvp'].data 	= camera.getMatrix();
+
+		// Send them.
 		this.program.sendCommonUniforms();
 	}
 };
@@ -86,7 +94,7 @@ Renderer.WebGL.RendererCache.prototype.setProgram = function( program )
 * Change texture in cache.
 * @param {Renderer.WebGL.Texture} texture Texture to use.
 */
-Renderer.WebGL.RendererCache.prototype.setTexture = function( texture ) 
+Renderer.WebGL.RendererHelper.prototype.useTexture = function( texture ) 
 {
 	if( texture != this.texture )
 	{

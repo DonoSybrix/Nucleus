@@ -18,9 +18,9 @@ Renderer.main = function()
 	* Create a camera.
 	*/
 	var camera = new Renderer.Camera("3D" );
-    camera.setPosition( 0, 0, 2 );
-    camera.lookAt( 0, 0, -5 );
-    camera.setPosition( 0, 0, 0 );
+	camera.setPosition( 0, 0, 2 );
+	camera.lookAt( 0, 0, -5 );
+	camera.setPosition( 0, 0, 0 );
 
 	/**
 	* Create a scene.
