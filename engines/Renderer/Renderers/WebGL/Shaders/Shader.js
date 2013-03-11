@@ -84,7 +84,7 @@ Renderer.WebGL.Shader.prototype.fill = function( source )
 /**
  * Remove the shader from GPU memory.
  */
-Renderer.WebGL.Shader.prototype.delete = function() 
+Renderer.WebGL.Shader.prototype.clear = function() 
 {
 	Renderer.WebGL.ContextManager.getInstance().getCurrentContext().deleteShader( this.id );
 };

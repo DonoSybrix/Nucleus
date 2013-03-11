@@ -41,7 +41,7 @@ Renderer.Geometric.GeometryConfiguration.DATACOUNT_TEXTURE = 2;
  */
 Renderer.Geometric.GeometryConfiguration.TypeSize = {
     FLOAT : 4,
-    SHORT : 1,
+    SHORT : 1
 };
 
 /**

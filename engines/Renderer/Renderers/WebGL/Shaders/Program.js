@@ -1,5 +1,6 @@
 goog.provide('Renderer.WebGL.Program');
 goog.require('Renderer.WebGL.AttributDefinition');
+goog.require('Renderer.WebGL.ProgramBuilder');
 goog.require('Renderer.WebGL.Shader');
 goog.require('Renderer.WebGL.ShaderDefinition');
 goog.require('Renderer.WebGL.UniformDefinition');
@@ -134,8 +135,8 @@ Renderer.WebGL.Program.prototype.build = function()
 	context.linkProgram( this.id );
 
 	// Clear data.
-	this.vertexShader.delete();
-	this.fragmentShader.delete();
+	this.vertexShader.clear();
+	this.fragmentShader.clear();
 
 	// Check for errors.
 	if ( !context.getProgramParameter( this.id, goog.webgl.LINK_STATUS ) ) 
@@ -146,7 +147,8 @@ Renderer.WebGL.Program.prototype.build = function()
 
 	// Build uniforms and attributs.
 	this.buildAttributs();
-	this.buildUniforms();
+	this.buildUniforms( this.commonUniforms );
+	this.buildUniforms( this.modelUniforms );
 };
 
 /**
@@ -166,12 +168,12 @@ Renderer.WebGL.Program.prototype.buildAttributs = function()
 
 /**
  * Build uniforms.
+ * @param {Array.<string, Renderer.WebGL.UniformDefinition>} uniforms List of uniforms to work with.
  */
-Renderer.WebGL.Program.prototype.buildUniforms = function() 
+Renderer.WebGL.Program.prototype.buildUniforms = function( uniforms ) 
 {
 	var context  = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
 
-	var uniforms = this.commonUniforms;
     for( var i in uniforms ) 
     {
     	uniforms[i].id = context.getUniformLocation( this.id, i );

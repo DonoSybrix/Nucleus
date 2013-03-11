@@ -1,5 +1,4 @@
 goog.provide('Renderer.WebGL.ProgramBuilder');
-goog.require('Renderer.WebGL.Program');
 goog.require('Renderer.WebGL.ShaderDefinition');
 goog.require('Nucleus.ErrorManager');
 
@@ -107,15 +106,24 @@ Renderer.WebGL.ProgramBuilder.prototype.addAttribut = function( name, count, typ
 /**
  * Add uniform.
  * @param {string} name Name of the element.
+ * @param {boolean} isCommon Say if we want a common uniform.
  * @param {number} count Number of element given.
  * @param {WebGL.Program.Type} type Type of the element.
  * @param {WebGL.Program.TypePrecision=} precision Precision of the type [optional].
  * @private
  */
-Renderer.WebGL.ProgramBuilder.prototype.addUniform = function( name, count, type, precision ) 
+Renderer.WebGL.ProgramBuilder.prototype.addUniform = function( name, isCommon, count, type, precision ) 
 {
 	this.uniformList.add( name, count, type, precision );
-	this.program.addCommonUniform( name, type );
+
+	if( isCommon )
+	{
+		this.program.addCommonUniform( name, type );
+	}
+	else
+	{
+		this.program.addModelUniform( name, type );
+	}
 };
 
 /**
@@ -139,15 +147,15 @@ Renderer.WebGL.ProgramBuilder.prototype.addDefaultUniforms = function()
     	Nucleus.ErrorManager.error('Program is null, ProgramBuilder can\'t add default uniforms.');
 	}
 
-	this.addUniform('uMvp', 		 1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
-	this.addUniform('uModel', 		 1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
-	this.addUniform('uAmbientLight', 1, WebGL.Program.Type.VEC3 );
+	this.addUniform('uMvp', 		 true,  1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
+	this.addUniform('uModel', 		 false, 1, WebGL.Program.Type.MATRIX4, WebGL.Program.TypePrecision.MEDIUM );
+	this.addUniform('uAmbientLight', true,  1, WebGL.Program.Type.VEC3 );
 
 	if( this.useMaterial )
 	{
 		var materialUniformName = 'uMaterial';
 
-		this.addUniform( materialUniformName, 1, WebGL.Program.Type.STRUCTURE );
+		this.addUniform( materialUniformName, false, 1, WebGL.Program.Type.STRUCTURE );
 
 		// Add material data.		
 	/*	var materialStructure = this.program.getUniformList().elements[materialUniformName];
@@ -160,7 +168,7 @@ Renderer.WebGL.ProgramBuilder.prototype.addDefaultUniforms = function()
 	if( this.useLight )
 	{
 		var lightsUniformName = 'uLight';
-		this.addUniform(lightsUniformName, 1, WebGL.Program.Type.STRUCTURE );
+		this.addUniform(lightsUniformName, true, 1, WebGL.Program.Type.STRUCTURE );
 
 		// Add light one per one as a "sub-uniform".
 		/*var lightStructure = this.program.getUniformList().elements[lightsUniformName];

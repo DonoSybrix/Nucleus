@@ -5,8 +5,10 @@ goog.addDependency('../../../../Nucleus/engines/Core/Debugging/ErrorManager.js',
 goog.addDependency('../../../../Nucleus/engines/Core/FileManager/File.js', ['Nucleus.File'], ['Nucleus.Resource']);
 goog.addDependency('../../../../Nucleus/engines/Core/ResourceManager/Resource.js', ['Nucleus.Resource'], []);
 goog.addDependency('../../../../Nucleus/engines/Core/ResourceManager/ResourceManager.js', ['Nucleus.ResourceManager'], ['Nucleus.Resource']);
+goog.addDependency('../../../../Nucleus/engines/Core/Tools/AnimationFramerate.js', ['Core.AnimationFramerate'], []);
 goog.addDependency('../../../../Nucleus/engines/Core/Transformables/Transformable.js', ['Core.Transformable'], ['goog.vec.Mat4', 'goog.vec.Vec3']);
-goog.addDependency('../../../../Nucleus/engines/Renderer.js', ['Renderer.main'], ['Renderer.Geometric.Geometry', 'Renderer.Mesh', 'Renderer.PrimitiveBuilder', 'Renderer.WebGL.ProgramLibrary', 'Renderer.WebGL.Texture', 'Renderer.WebGLRenderer']);
+goog.addDependency('../../../../Nucleus/engines/Game/Core/GameInterface.js', ['Game.GameInterface'], ['Core.AnimationFramerate', 'Game.State', 'Renderer.WebGLRenderer']);
+goog.addDependency('../../../../Nucleus/engines/Game/Core/State.js', ['Game.State'], []);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Cameras/Camera.js', ['Renderer.Camera'], ['Core.Transformable', 'goog.vec.Mat3']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Core/Color.js', ['Renderer.Core.Color'], ['goog.vec.Vec4']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Core/Spacial.js', ['Renderer.Core.Spacial'], ['Core.Transformable']);
@@ -18,7 +20,7 @@ goog.addDependency('../../../../Nucleus/engines/Renderer/Lights/AmbientLight.js'
 goog.addDependency('../../../../Nucleus/engines/Renderer/Lights/DirectionalLight.js', ['Renderer.DirectionalLight'], ['Renderer.Private.AbstractLight']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Lights/PointLight.js', ['Renderer.PointLight'], ['Renderer.Private.AbstractLight']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Lights/SpotLight.js', ['Renderer.SpotLight'], ['Renderer.Private.AbstractLight']);
-goog.addDependency('../../../../Nucleus/engines/Renderer/Materials/Material.js', ['Renderer.Materials.Material'], ['Renderer.Core.Color', 'goog.webgl']);
+goog.addDependency('../../../../Nucleus/engines/Renderer/Materials/Material.js', ['Renderer.Materials.Material'], ['Renderer.Core.Color', 'Renderer.WebGL.ProgramLibrary', 'goog.webgl']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Objects/Mesh.js', ['Renderer.Mesh'], ['Renderer.Core.Spacial', 'Renderer.Geometric.Geometry', 'Renderer.Materials.Material']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/Renderer.js', ['Renderer.Renderer'], ['Renderer.Camera', 'Renderer.Scene', 'Renderer.TextureFactory']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Buffer/Buffer.js', ['Renderer.WebGL.Buffer'], ['goog.webgl']);
@@ -33,8 +35,8 @@ goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Geometr
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Renderer/Renderer.js', ['Renderer.WebGLRenderer'], ['Renderer.Mesh', 'Renderer.Renderer', 'Renderer.WebGL.ContextManager', 'Renderer.WebGL.RendererHelper', 'Renderer.WebGL.TextureFactory']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Renderer/RendererHelper.js', ['Renderer.WebGL.RendererHelper'], ['Renderer.WebGL.GeometryConfiguration', 'Renderer.WebGL.Program', 'Renderer.WebGL.Texture']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/AttributDefinition.js', ['Renderer.WebGL.AttributDefinition'], []);
-goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/Program.js', ['Renderer.WebGL.Program'], ['Nucleus.ErrorManager', 'Renderer.WebGL.AttributDefinition', 'Renderer.WebGL.Shader', 'Renderer.WebGL.ShaderDefinition', 'Renderer.WebGL.UniformDefinition']);
-goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/ProgramBuilder.js', ['Renderer.WebGL.ProgramBuilder'], ['Nucleus.ErrorManager', 'Renderer.WebGL.Program', 'Renderer.WebGL.ShaderDefinition']);
+goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/Program.js', ['Renderer.WebGL.Program'], ['Nucleus.ErrorManager', 'Renderer.WebGL.AttributDefinition', 'Renderer.WebGL.ProgramBuilder', 'Renderer.WebGL.Shader', 'Renderer.WebGL.ShaderDefinition', 'Renderer.WebGL.UniformDefinition']);
+goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/ProgramBuilder.js', ['Renderer.WebGL.ProgramBuilder'], ['Nucleus.ErrorManager', 'Renderer.WebGL.ShaderDefinition']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/ProgramLibrary.js', ['Renderer.WebGL.ProgramLibrary'], ['Renderer.WebGL.ProgramBuilder']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/Shader.js', ['Renderer.WebGL.Shader', 'WebGL.Program.Type', 'WebGL.Program.TypePrecision'], ['Nucleus.File', 'goog.webgl']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Shaders/ShaderDefinition.js', ['Renderer.WebGL.ShaderDefinition'], ['Renderer.WebGL.ShaderElement']);

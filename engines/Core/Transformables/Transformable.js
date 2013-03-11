@@ -112,3 +112,12 @@ Core.Transformable.prototype.getPosition = function()
 {
     return this.position;
 };
+
+/**
+ * Return the rotation.
+ * @return {goog.vec.Vec3.Float32} Rotation of the transformable.
+ */
+Core.Transformable.prototype.getRotation = function() 
+{
+    return this.rotation;
+};

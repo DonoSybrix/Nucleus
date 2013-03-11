@@ -99,18 +99,16 @@ Renderer.WebGLRenderer.prototype.renderMeshWithVBO = function( camera, mesh )
 	var material = mesh.getMaterial();
 	var program  = material.getProgram();
 
-	// Set comon uniforms values.
-	var uniforms 			= program.getCommonUniforms();
-	uniforms['uModel'].data = mesh.getTransformable().getMatrix();
-
 	// Set program to use.
 	this.helper.useProgram( program, camera );
 
+	// Send model uniforms.
+	var uniforms 			= program.getModelUniforms();
+	uniforms['uModel'].data = mesh.getTransformable().getMatrix();
+	program.sendModelUniforms();
+
 	// Enable Attributs.
 	this.helper.useGeometry( mesh.getGeometry() );
-
-	// Send model uniforms.
-	// this.cache.program.sendPersonalUniforms();
 
 	// Finally draw.
     this.context.drawElements( 	material.getDrawingMode(), 

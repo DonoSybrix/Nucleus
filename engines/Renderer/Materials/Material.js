@@ -1,5 +1,6 @@
 goog.provide('Renderer.Materials.Material');
 goog.require('Renderer.Core.Color');
+goog.require('Renderer.WebGL.ProgramLibrary');
 goog.require('goog.webgl');
 
 /**
