@@ -1,5 +1,6 @@
 goog.provide('Game.System');
 goog.require('Game.Entity');
+goog.require('Game.Private.Key');
 
 /**
  * A system.
@@ -8,6 +9,14 @@ goog.require('Game.Entity');
  */
 Game.System = function() 
 {
+
+	/**
+	* State of the system.
+	* @type {boolean}
+	* @private
+	*/
+	this.active = true;
+
 	/**
 	* Array of entities.
 	* @type {Array.<Game.Entity>}
@@ -23,11 +32,11 @@ Game.System = function()
 	this.entityCount = 0;
 
 	/**
-	* State of the system.
-	* @type {boolean}
-	* @private
+	* Key of the system.
+	* @type {Game.Private.Key}
+	* @public
 	*/
-	this.active = true;
+	this.key = new Game.Private.Key();
 
 };
 
@@ -52,13 +61,23 @@ Game.System.prototype.init = function() { };
 Game.System.prototype.shutdown = function() { };
 
 /**
+ * Method call after processing.
+ */
+Game.System.prototype.afterProcessing = function() { };
+
+/**
+ * Method call before processing.
+ */
+Game.System.prototype.beforeProcessing = function() { };
+
+/**
  * Update system's entities.
  */
-Game.System.prototype.update = function() 
+Game.System.prototype.process = function() 
 {
 	for( var i = 0, len = this.entityCount; i < len; ++i ) 
 	{
-		this.updateEntity( this.entities[i] );
+		this.processEntity( this.entities[i] );
 	}
 };
 
@@ -66,4 +85,4 @@ Game.System.prototype.update = function()
  * Update the given entity.
  * @param {Game.Entity} entity Entity to update.
  */
-Game.System.prototype.updateEntity = function( entity ) { };
+Game.System.prototype.processEntity = function( entity ) { };

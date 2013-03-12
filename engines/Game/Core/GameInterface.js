@@ -18,7 +18,7 @@ Game.GameInterface = function()
 	this.currentState = null;
 
 	/**
-	* State actually used by the game.
+	* Renderer used by the game.
 	* @type {Renderer.WebGLRenderer}
 	* @private
 	*/
@@ -58,4 +58,13 @@ Game.GameInterface.prototype.update = function()
 Game.GameInterface.prototype.clear = function()
 {
 	this.prepare();
+};
+
+/**
+ * Return a reference to the renderer.
+ * @return {Renderer.WebGLRenderer} A reference to the renderer.
+ */
+Game.GameInterface.prototype.getRenderer = function()
+{
+	return this.renderer;
 };

@@ -1,5 +1,7 @@
 goog.provide('Game.EntitySystem.ComponentManager');
 goog.require('Game.Component');
+goog.require('Game.EntitySystem.ComponentContainer');
+goog.require('Game.Private.Key');
 
 /**
  * Manage components.
@@ -11,7 +13,7 @@ Game.EntitySystem.ComponentManager = function( world )
 {
 	/**
 	* List of entities with assigned components.
-	* @type {Array.<number, Array.<Game.Component> >}
+	* @type {Array.<number, Game.EntitySystem.ComponentContainer>}
 	* @private
 	*/
 	this.components = [];
@@ -37,5 +39,30 @@ Game.EntitySystem.ComponentManager.prototype.addComponent = function( entity, co
 
 	// Add to the entity.
 	var componentsContainer = this.components[entity.getId()];
-	componentsContainer[componentsContainer.length] = component;
+
+	if( componentsContainer == undefined ) {
+		componentsContainer = new Game.EntitySystem.ComponentContainer();
+	}
+
+	componentsContainer.add( component );
+};
+
+/**
+ * Return the asked component for the given entity.
+ * @param {Game.Entity} entity Entity asking component.
+ * @param {string} componentName Name of the component asked.
+ */
+Game.EntitySystem.ComponentManager.prototype.getComponent = function( entity, componentName ) 
+{
+	return this.components[entity.getId()].get( componentName );
+};
+
+/**
+ * Return entity's key.
+ * @param {Game.Entity} entity Entity asking component.
+ * @return {Game.Private.Key} componentName Name of the component asked.
+ */
+Game.EntitySystem.ComponentManager.prototype.getKey = function( entity ) 
+{
+	return this.components[entity.getId()].getKey();
 };

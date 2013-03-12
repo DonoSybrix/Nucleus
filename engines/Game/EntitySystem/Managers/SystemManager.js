@@ -45,7 +45,40 @@ Game.EntitySystem.SystemManager.prototype.addSystem = function( system )
 /**
  * Init systems.
  */
-Game.EntitySystem.SystemManager.prototype.init = function() { };
+Game.EntitySystem.SystemManager.prototype.init = function() 
+{ 
+	for( var i = 0, len = this.systemCount; i < len; ++i ) 
+	{
+		this.systems[i].init();
+	}
+};
+
+/**
+ * Register an entity to systems.
+ * @param {Game.Entity} entity Entity to register.
+ * @param {Game.Private.Key} key Entity's key.
+ */
+Game.EntitySystem.SystemManager.prototype.registerEntity = function( entity, key ) 
+{
+	for( var i = 0, len = this.systemCount; i < len; ++i ) 
+	{
+		if( this.systems[i].key & key == this.systems[i].key )
+		{
+			this.systems[i].addEntity( entity );
+		}
+	}
+};
+
+/**
+ * Shutdown systems.
+ */
+Game.EntitySystem.SystemManager.prototype.shutdown = function() 
+{
+	for( var i = 0, len = this.systemCount; i < len; ++i ) 
+	{
+		this.systems[i].shutdown();
+	}
+};
 
 /**
  * Update systems.
@@ -54,11 +87,6 @@ Game.EntitySystem.SystemManager.prototype.update = function()
 {
 	for( var i = 0, len = this.systemCount; i < len; ++i ) 
 	{
-		this.systems[i].update();
+		this.systems[i].process();
 	}
 };
-
-/**
- * Shutdown systems.
- */
- Game.EntitySystem.SystemManager.prototype.shutdown = function() { };

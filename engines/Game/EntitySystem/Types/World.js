@@ -34,6 +34,15 @@ Game.World = function()
 };
 
 /**
+ * Add a system.
+ * @param {Game.System} system System to add.
+ */
+Game.World.prototype.addSystem = function( system ) 
+{
+	this.systemManager.addSystem( system );
+};
+
+/**
  * Add an entity to the system.
  * @return {Game.Entity} A new entity.
  */
@@ -46,8 +55,8 @@ Game.World.prototype.createEntity = function()
  * Init the world.
  */
 Game.World.prototype.init = function() 
-{ 
-
+{
+	this.systemManager.init();
 };
 
 /**
@@ -63,7 +72,7 @@ Game.World.prototype.update = function()
  */
 Game.World.prototype.shutdown = function() 
 { 
-	
+	this.systemManager.shutdown();
 };
 
 /**

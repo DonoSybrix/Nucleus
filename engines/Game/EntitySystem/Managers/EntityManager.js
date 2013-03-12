@@ -31,5 +31,5 @@ Game.EntitySystem.EntityManager = function( world )
  */
 Game.EntitySystem.EntityManager.prototype.createEntity = function() 
 {
- 	return new Game.Entity( this.entityCount++ );
+ 	return new Game.Entity( this.entityCount++, this.world );
 };

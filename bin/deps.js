@@ -9,12 +9,14 @@ goog.addDependency('../../../../Nucleus/engines/Core/Tools/AnimationFramerate.js
 goog.addDependency('../../../../Nucleus/engines/Core/Transformables/Transformable.js', ['Core.Transformable'], ['goog.vec.Mat4', 'goog.vec.Vec3']);
 goog.addDependency('../../../../Nucleus/engines/Game/Core/GameInterface.js', ['Game.GameInterface'], ['Core.AnimationFramerate', 'Game.State', 'Renderer.WebGLRenderer']);
 goog.addDependency('../../../../Nucleus/engines/Game/Core/State.js', ['Game.State'], []);
-goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Managers/ComponentManager.js', ['Game.EntitySystem.ComponentManager'], ['Game.Component']);
+goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Managers/ComponentContainer.js', ['Game.EntitySystem.ComponentContainer'], ['Game.Component', 'Game.Private.Key']);
+goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Managers/ComponentManager.js', ['Game.EntitySystem.ComponentManager'], ['Game.Component', 'Game.EntitySystem.ComponentContainer', 'Game.Private.Key']);
 goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Managers/EntityManager.js', ['Game.EntitySystem.EntityManager'], ['Game.Component']);
 goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Managers/SystemManager.js', ['Game.EntitySystem.SystemManager'], ['Game.System']);
 goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Types/Component.js', ['Game.Component'], ['Game.Entity']);
 goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Types/Entity.js', ['Game.Entity'], []);
-goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Types/System.js', ['Game.System'], ['Game.Entity']);
+goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Types/Key.js', ['Game.Private.Key'], []);
+goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Types/System.js', ['Game.System'], ['Game.Entity', 'Game.Private.Key']);
 goog.addDependency('../../../../Nucleus/engines/Game/EntitySystem/Types/World.js', ['Game.World'], ['Game.EntitySystem.ComponentManager', 'Game.EntitySystem.EntityManager', 'Game.EntitySystem.SystemManager']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Cameras/Camera.js', ['Renderer.Camera'], ['Core.Transformable', 'goog.vec.Mat3']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Core/Color.js', ['Renderer.Core.Color'], ['goog.vec.Vec4']);
