@@ -52,6 +52,16 @@ Game.World.prototype.createEntity = function()
 };
 
 /**
+ * Remove an entity from the world.
+ * @param {Game.Entity} entity Entity to remove.
+ */
+Game.World.prototype.removeEntity = function( entity ) 
+{
+	this.systemManager.unsubscribeEntity( entity, entity.getKey() );
+	this.componentManager.removeComponents( entity );
+};
+
+/**
  * Init the world.
  */
 Game.World.prototype.init = function() 

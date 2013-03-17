@@ -62,9 +62,25 @@ Game.EntitySystem.SystemManager.prototype.registerEntity = function( entity, key
 {
 	for( var i = 0, len = this.systemCount; i < len; ++i ) 
 	{
-		if( this.systems[i].key & key == this.systems[i].key )
+		if( (this.systems[i].key.value & key.value) == this.systems[i].key.value )
 		{
 			this.systems[i].addEntity( entity );
+		}
+	}
+};
+
+/**
+ * Remove an entity from systems.
+ * @param {Game.Entity} entity Entity to remove.
+ * @param {Game.Private.Key} key Entity's key.
+ */
+Game.EntitySystem.SystemManager.prototype.unsubscribeEntity = function( entity, key ) 
+{
+	for( var i = 0, len = this.systemCount; i < len; ++i ) 
+	{
+		if( (this.systems[i].key.value & key.value) == this.systems[i].key.value )
+		{
+			this.systems[i].removeEntity( entity );
 		}
 	}
 };

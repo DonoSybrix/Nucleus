@@ -35,6 +35,23 @@ Renderer.WebGLRenderer = function( canvas )
 	*/
 	this.helper = new Renderer.WebGL.RendererHelper();
 
+	/**
+	* Init WebGL flags.
+	*/
+	this.initFlags();
+};
+
+/**
+ * Init WebGL flags.
+ * @private
+ */
+Renderer.WebGLRenderer.prototype.initFlags = function() 
+{
+	this.context.enable( goog.webgl.DEPTH_TEST );
+	this.context.depthFunc(goog.webgl.LESS);
+
+	/*this.context.enable(goog.webgl.BLEND);
+	this.context.blendFunc(goog.webgl.SRC_ALPHA, goog.webgl.ONE_MINUS_SRC_ALPHA );*/
 };
 
 /**
@@ -107,8 +124,11 @@ Renderer.WebGLRenderer.prototype.renderMeshWithVBO = function( camera, mesh )
 	uniforms['uModel'].data = mesh.getTransformable().getMatrix();
 	program.sendModelUniforms();
 
-	// Enable Attributs.
-	this.helper.useGeometry( mesh.getGeometry() );
+	// Enable material.
+	this.helper.useMaterial( mesh.getMaterial(), this.context );
+
+	// Enable geometry.
+	this.helper.useGeometry( mesh.getGeometry(), this.context );
 
 	// Finally draw.
     this.context.drawElements( 	material.getDrawingMode(), 

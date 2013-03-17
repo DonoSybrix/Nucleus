@@ -90,11 +90,11 @@ Renderer.WebGL.GeometryConfiguration.prototype.add = function( name, count, type
 /**
 * Bind the attribut.
 * @param {Array.<Object>} programAttributList List of atributs.
+* @param {WebGLRenderingContext} context A reference to the context.
 */
-Renderer.WebGL.GeometryConfiguration.prototype.bindGeometry = function( programAttributList )
+Renderer.WebGL.GeometryConfiguration.prototype.bindGeometry = function( programAttributList, context )
 {
     // Usefull variables.
-    var context         = Renderer.WebGL.ContextManager.getInstance().getCurrentContext();
     var attribut        = null;
     var programAttribut = null;
 
@@ -112,7 +112,7 @@ Renderer.WebGL.GeometryConfiguration.prototype.bindGeometry = function( programA
         attribut        = this.attributs[i];
         programAttribut = programAttributList[attribut.name];
 
-        if( programAttribut == undefined ) {
+        if( programAttribut == undefined || programAttribut.id == -1 ) {
             continue;
         }
 

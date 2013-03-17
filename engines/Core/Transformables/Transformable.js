@@ -90,13 +90,15 @@ Core.Transformable.prototype.getMatrix = function()
 {
     if ( this.needTransformUpdate )
     {
-        goog.vec.Mat4.makeTranslate( this.matrix, this.position[0], this.position[1], this.position[2] );
+        goog.vec.Mat4.makeTranslate( this.matrix, 0, 0, 0 );
 
-        goog.vec.Mat4.scale( this.matrix, this.scale[0], this.scale[1], this.scale[2] );
+        goog.vec.Mat4.translate( this.matrix, this.position[0], this.position[1], this.position[2] );
 
         goog.vec.Mat4.rotateX( this.matrix, this.rotation[0] );
         goog.vec.Mat4.rotateY( this.matrix, this.rotation[1] );
         goog.vec.Mat4.rotateZ( this.matrix, this.rotation[2] );
+
+        goog.vec.Mat4.scale( this.matrix, this.scale[0], this.scale[1], this.scale[2] );
 
         this.needTransformUpdate = false;
     }

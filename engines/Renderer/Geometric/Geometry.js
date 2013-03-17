@@ -16,6 +16,20 @@ Renderer.Geometric.Geometry = function()
     this.configuration = null;
 
     /**
+    * List of colors.
+    * @type {Uint8Array}
+    * @private
+    */
+    this.colors = null;
+
+    /**
+    * Colors counter.
+    * @type {number}
+    * @private
+    */
+    this.colorCount = 0;
+
+    /**
     * List of indices.
     * @type {Uint8Array|Uint16Array|Uint32Array|null}
     * @private
@@ -140,15 +154,6 @@ Renderer.Geometric.Geometry.prototype.addVertexTextureCoordinates = function( x,
 };
 
 /**
- * Bind the geometry attributs [WebGL only].
- * @param {Array.<Object>} programAttributList List of attributs of the shader.
- */
-Renderer.Geometric.Geometry.prototype.bind = function( programAttributList ) 
-{
-    this.configuration.bindGeometry( programAttributList );
-};
-
-/**
  * Build the geometry array.
  */
 Renderer.Geometric.Geometry.prototype.build = function() 
@@ -197,11 +202,11 @@ Renderer.Geometric.Geometry.prototype.build = function()
                                 goog.webgl.UNSIGNED_BYTE,
                                 0,
                                 Renderer.Geometric.GeometryConfiguration.ElementLength.COLOR,
-                                this.positions );
+                                this.colors );
 
         if( hasTexture )
         {
-            this.configuration.add( 'Texture', 
+            this.configuration.add( 'aTexCoord', 
                                     Renderer.Geometric.GeometryConfiguration.DATACOUNT_TEXTURE, 
                                     goog.webgl.FLOAT,
                                     0,
@@ -211,7 +216,7 @@ Renderer.Geometric.Geometry.prototype.build = function()
 
         if( hasNormals )
         {
-            this.configuration.add( 'Normal', 
+            this.configuration.add( 'aNormal', 
                                     Renderer.Geometric.GeometryConfiguration.DATACOUNT_NORMAL, 
                                     goog.webgl.FLOAT,
                                     0,
@@ -254,6 +259,26 @@ Renderer.Geometric.Geometry.prototype.getConfiguration = function()
 Renderer.Geometric.Geometry.prototype.getIndiceCount = function() 
 {
     return this.indiceCount;
+};
+
+/**
+ * Set number of color, resize colors array.
+ * @param {number} colorCount Color count.
+ */
+Renderer.Geometric.Geometry.prototype.setVertexColorCount = function( colorCount ) 
+{
+    this.colors       = new Uint8Array( colorCount * Renderer.Geometric.GeometryConfiguration.DATACOUNT_COLOR );
+    this.colorCount   = 0;
+};
+
+/**
+ * Set directly geometry's colors.
+ * @param {Array.<number>} colors Array of colors.
+ */
+Renderer.Geometric.Geometry.prototype.setVertexColors = function( colors ) 
+{
+    this.colors       = new Uint8Array( colors );
+    this.colorCount   = colors.length;
 };
 
 /**

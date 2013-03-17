@@ -30,7 +30,26 @@ Game.Entity = function( id, world )
  */
 Game.Entity.prototype.activate = function() 
 {
-	this.world.getSystemManager().registerEntity( this, this.world.getComponentManager().getKey( this ) );
+	this.world.getSystemManager().registerEntity( this, this.getKey() );
+};
+
+/**
+ * Return the asked component.
+ * @param {Game.Component} component Component to attach to the entity.
+ */
+Game.Entity.prototype.addComponent = function( component ) 
+{
+    this.world.getComponentManager().addComponent( this, component );
+};
+
+/**
+ * Remove the asked component.
+ * @param {string} componentName Name of the component to remove.
+ */
+Game.Entity.prototype.removeComponent = function( componentName ) 
+{
+    this.world.getComponentManager().removeComponent( this, componentName );
+    // TODO: Remove from systems.
 };
 
 /**
@@ -40,6 +59,15 @@ Game.Entity.prototype.activate = function()
 Game.Entity.prototype.getId = function() 
 {
     return this.id;
+};
+
+/**
+ * Return the entity key.
+ * @return {Game.Private.Key} Entity key.
+ */
+Game.Entity.prototype.getKey = function() 
+{
+    return this.world.getComponentManager().getKey( this );
 };
 
 /**

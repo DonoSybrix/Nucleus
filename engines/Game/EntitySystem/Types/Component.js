@@ -36,7 +36,7 @@ Game.Component.prototype.getOwner = function()
 };
 
 /**
- * Return component name.
+ * Return component's name.
  * @return {string} Name of the component.
  */
-Game.Component.prototype.getName = function() { return ''; };
+Game.Component.prototype.getComponentName = function() { return ''; };

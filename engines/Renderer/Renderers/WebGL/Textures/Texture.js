@@ -32,6 +32,13 @@ Renderer.WebGL.Texture = function( context )
     */
     this.source = null;
 
+    /**
+    * State of the texture.
+    * @type {boolean}
+    * @private
+    */
+    this.ready = false;
+
 };
 
 /**
@@ -114,13 +121,20 @@ Renderer.WebGL.Texture.prototype.fill = function( data )
 	// Bind texture to work with.
 	this.bind();
 
+	// Set filters.
+	this.setFilters( goog.webgl.LINEAR, goog.webgl.LINEAR );
+
   	// Blank texture.
+    context.pixelStorei( goog.webgl.UNPACK_FLIP_Y_WEBGL, 1);
     context.texImage2D( goog.webgl.TEXTURE_2D,
     					0,
     					goog.webgl.RGBA,
     					goog.webgl.RGBA,
     					goog.webgl.UNSIGNED_BYTE,
     					data );
+
+    Renderer.WebGL.Texture.unbind();
+    this.ready = true;
 };
 
 /**
@@ -213,4 +227,13 @@ Renderer.WebGL.Texture.prototype.getSource = function()
 Renderer.WebGL.Texture.prototype.getWidth = function() 
 {
 	return this.source.getWidth();
+};
+
+/**
+ * Return texture's state.
+ * @return {boolean} State of the texture.
+ */
+Renderer.WebGL.Texture.prototype.isReady = function() 
+{
+	return this.ready;
 };

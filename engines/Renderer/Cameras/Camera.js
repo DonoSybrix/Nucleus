@@ -49,6 +49,13 @@ Renderer.Camera = function( cameraType )
     this.viewport = { x: 0, y: 0, width: 800, height: 600 };
 
     /**
+    * Field of view.
+    * @type {number}
+    * @public
+    */
+    this.fieldOfView = 45;
+
+    /**
     * Set the default type.
     */
     this.changeType( cameraType );
@@ -64,11 +71,44 @@ goog.inherits( Renderer.Camera, Core.Transformable );
  */
 Renderer.Camera.prototype.lookAt = function( centerX, centerY, centerZ ) 
 {
+/*
+    var forward = [ 0, 0, 0 ];
+    var _phi = 0;
+    var _theta = 0;
+
+    if (_phi > 89)
+        _phi = 89;
+    else if (_phi < -89)
+        _theta = -89;
+
+    var r_temp = Math.cos(_phi*Math.PI/180);
+    forward[0] = Math.sin(_phi*Math.PI/180);
+    forward[1] = r_temp*Math.cos(_theta*Math.PI/180);
+    forward[2] = r_temp*Math.sin(_theta*Math.PI/180);
+
+    var left = [];
+    left[0] = (this.up[1] * forward[2]) - (this.up[2] * forward[1]);
+    left[1] = (this.up[2] * forward[0]) - (this.up[0] * forward[2]);
+    left[2] = (this.up[0] * forward[1]) - (this.up[1] * forward[0]);
+
+    var l = Math.sqrt( ( left[0] * left[0]) + ( left[1] * left[1]) + (left[2] * left[2]) ); 
+    left[0] /= l; 
+    left[1] /= l; 
+    left[2] /= l; 
+
+ var p = [this.position[0] + forward[0], this.position[1] + forward[1], this.position[2] + forward[2]];
+
+ console.log( p );*/
+ var p = [0, 0, 0];
+
+
     this.viewMatrix =  /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makeLookAt( goog.vec.Mat4.createFloat32(), 
                             this.position,
-                            [centerX, centerY, centerZ],
+                            p,
                             this.up ) );
+
+    this.needTransformUpdate = true;
 
 };
 
@@ -83,6 +123,8 @@ Renderer.Camera.prototype.makePerspective = function( fovy, ratio, near, far )
 {
     this.projectionMatrix = /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makePerspective( goog.vec.Mat4.createFloat32(), fovy, ratio, near, far ) );
+
+    this.needTransformUpdate = true;
 };
 
 /**
@@ -98,6 +140,8 @@ Renderer.Camera.prototype.makeOrthographic = function( left, right, bottom, top,
 {
     this.projectionMatrix = /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makeOrtho( goog.vec.Mat4.createFloat32(), left, right, bottom, top, near, far ) );
+
+    this.needTransformUpdate = true;
 };
 
 /**
@@ -113,6 +157,8 @@ Renderer.Camera.prototype.makeFrustum = function( left, right, bottom, top, near
 {
     this.projectionMatrix = /** @type {!goog.vec.Mat4.Float32} */ (
                             goog.vec.Mat4.makeFrustum( goog.vec.Mat4.createFloat32(), left, right, bottom, top, near, far ) );
+
+    this.needTransformUpdate = true;
 };
 
 /**
@@ -122,7 +168,9 @@ Renderer.Camera.prototype.makeFrustum = function( left, right, bottom, top, near
 Renderer.Camera.prototype.changeType = function( type ) 
 {
     // Default view direction.
-    this.lookAt( 0, 0, -5 ); 
+    this.setPosition( 0, 0, 2 );
+    this.lookAt( 0, 0, -5 );
+    this.setPosition( 0, 0, 0 );
 
     // Projection.
     switch( type )
@@ -132,7 +180,7 @@ Renderer.Camera.prototype.changeType = function( type )
             break;
         case '3D':
         default:
-            this.makePerspective( 45, this.viewport.width / this.viewport.height, 1, 100 );
+            this.makePerspective( this.fieldOfView, this.viewport.width / this.viewport.height, 1, 100 );
             break;
     }
 };
@@ -159,14 +207,14 @@ Renderer.Camera.prototype.getMatrix = function()
     if( this.needTransformUpdate ) 
     {
         this.matrix = /** @type {!goog.vec.Mat4.Float32} */ (goog.vec.Mat4.cloneFloat32( this.viewMatrix ) ); 
-
-        goog.vec.Mat4.translate( this.matrix, this.position[0], this.position[1], this.position[2] );
-
+/*
         goog.vec.Mat4.scale( this.matrix, this.scale[0], this.scale[1], this.scale[2] );
 
-        goog.vec.Mat4.rotateX( this.matrix, this.rotation[0] );
-        goog.vec.Mat4.rotateY( this.matrix, this.rotation[1] );
-        goog.vec.Mat4.rotateZ( this.matrix, this.rotation[2] );
+        goog.vec.Mat4.rotateX( this.matrix, -this.rotation[0] );
+        goog.vec.Mat4.rotateY( this.matrix, -this.rotation[1] );
+        goog.vec.Mat4.rotateZ( this.matrix, -this.rotation[2] );
+
+        goog.vec.Mat4.translate( this.matrix, -this.position[0], -this.position[1], -this.position[2] );*/
 
         goog.vec.Mat4.multMat( this.projectionMatrix, this.matrix, this.matrix );
 
@@ -174,6 +222,22 @@ Renderer.Camera.prototype.getMatrix = function()
     }
 
     return this.matrix;
+};
+
+
+/**
+ * Change position of the element.
+ * @param {number} x Position on X.
+ * @param {number} y Position on Y.
+ * @param {number} z Position on Z.
+ * @override
+ */
+Renderer.Camera.prototype.setPosition = function( x, y, z ) 
+{
+    Core.Transformable.prototype.setPosition.call( this, x, y, z );
+    this.lookAt( 0, 0, 0 );
+
+    this.needTransformUpdate = true;
 };
 
 /**

@@ -17,13 +17,6 @@ Game.EntitySystem.ComponentContainer = function()
 	this.components = [];
 
 	/**
-	* Component count.
-	* @type {number}
-	* @private
-	*/
-	this.componentCount = 0;
-
-	/**
 	* Key generated with components.
 	* @type {Game.Private.Key}
 	* @private
@@ -38,8 +31,19 @@ Game.EntitySystem.ComponentContainer = function()
  */
 Game.EntitySystem.ComponentContainer.prototype.add = function( component ) 
 {
-	this.components[component.getName()] = component;
-	this.key.allow( component.getName() );
+	this.components[component.getComponentName()] = component;
+	this.key.allow( component.getComponentName() );
+};
+
+/**
+ * Remove a component.
+ * @param {Game.Component} component Component to remove.
+ */
+Game.EntitySystem.ComponentContainer.prototype.remove = function( component ) 
+{
+    var index = this.components.indexOf( component.getComponentName() );
+    this.components.splice(index, 1);
+	this.key.denied( component.getComponentName() );
 };
 
 /**

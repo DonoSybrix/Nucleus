@@ -30,11 +30,18 @@ Renderer.WebGL.RendererHelper = function()
 	this.program = null;
 
 	/**
-	* Last Texture binded.
-    * @type {Renderer.WebGL.Texture|null}
+	* Last Textures binded.
+    * @type {Array.<Renderer.WebGL.Texture>}
     * @public
 	*/
-	this.texture = null;
+	this.textures = [];
+
+	/**
+	* Last Texture slot used.
+    * @type {number}
+    * @public
+	*/
+	this.textureSlot = goog.webgl.TEXTURE0;
 
 };
 
@@ -46,14 +53,16 @@ Renderer.WebGL.RendererHelper.prototype.clear = function()
 	this.program  = null;
 	this.texture  = null;
 	this.geometry = null;
+	this.textures = [];
 };
 
 
 /**
 * Change geometry in cache.
 * @param {Renderer.Geometric.Geometry} geometry Geometry to use.
+* @param {WebGLRenderingContext} context A reference to the context.
 */
-Renderer.WebGL.RendererHelper.prototype.useGeometry = function( geometry ) 
+Renderer.WebGL.RendererHelper.prototype.useGeometry = function( geometry, context ) 
 {
 	if( geometry != this.geometry )
 	{
@@ -64,7 +73,7 @@ Renderer.WebGL.RendererHelper.prototype.useGeometry = function( geometry )
 			// this.geometry.update();
 		}
 
-		this.geometry.bind( this.program.getAttributs() );
+		this.geometryConfiguration.bindGeometry( this.program.getAttributs(), context );
 	}
 };
 
@@ -91,14 +100,22 @@ Renderer.WebGL.RendererHelper.prototype.useProgram = function( program, camera  
 };
 
 /**
-* Change texture in cache.
-* @param {Renderer.WebGL.Texture} texture Texture to use.
+* Apply given material.
+* @param {Renderer.Materials.Material} material Material to use.
+* @param {WebGLRenderingContext} context A reference to the context.
 */
-Renderer.WebGL.RendererHelper.prototype.useTexture = function( texture ) 
+Renderer.WebGL.RendererHelper.prototype.useMaterial = function( material, context ) 
 {
-	if( texture != this.texture )
+	var textures = material.getTextures();
+
+	for( var i = 0, len = material.getTextureCount(); i < len; ++i ) 
 	{
-		this.texture = texture;
-		this.texture.bind();
+		var slot = (goog.webgl.TEXTURE0 + i) - goog.webgl.TEXTURE0;
+		if( this.textures[slot] != textures[i] && textures[i].isReady() )
+		{
+        	context.activeTexture( goog.webgl.TEXTURE0 );
+        	textures[i].bind();
+        	this.textures[slot] = /** @type {Renderer.WebGL.Texture} */(textures[i]);
+		}
 	}
 };

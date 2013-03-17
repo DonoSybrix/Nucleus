@@ -50,7 +50,7 @@ Renderer.Materials.Material = function()
     * @type {number}
     * @protected
     */
-    this.shininess = 5;
+    this.shininess = 50;
 
     /**
     * The specular color.
@@ -61,10 +61,17 @@ Renderer.Materials.Material = function()
 
     /**
     * Texture.
-    * @type {Renderer.Texture|null}
+    * @type {Array.<number, Renderer.Texture>}
     * @protected
     */
-    this.texture = null;
+    this.textures = [];
+
+    /**
+    * Texture count.
+    * @type {number}
+    * @protected
+    */
+    this.textureCount = 0;
 
     /**
     * Visibility of the material.
@@ -234,7 +241,11 @@ Renderer.Materials.Material.prototype.setSpecularColor = function( r, g, b, a )
  */
 Renderer.Materials.Material.prototype.setTexture = function( texture ) 
 {
-    this.texture = texture;
+    this.textures[0] = texture;
+
+    if( this.textureCount < 1 ) {
+        this.textureCount++;
+    }
 };
 
 /**
@@ -261,4 +272,22 @@ Renderer.Materials.Material.prototype.getDrawingMode = function()
 Renderer.Materials.Material.prototype.getProgram = function() 
 {
     return this.program;
+};
+
+/**
+ * Return list of textures.
+ * @return {Array.<Renderer.Texture>} Array of textures.
+ */
+Renderer.Materials.Material.prototype.getTextures = function() 
+{
+    return this.textures;
+};
+
+/**
+ * Return texture count.
+ * @return {number} Texture count.
+ */
+Renderer.Materials.Material.prototype.getTextureCount = function() 
+{
+    return this.textureCount;
 };

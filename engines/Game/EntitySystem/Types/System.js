@@ -48,6 +48,32 @@ Game.System.prototype.addEntity = function( entity )
 {
 	this.entities[this.entityCount] = entity;
 	this.entityCount++;
+
+	this.onEntityAdded( entity );
+};
+
+/**
+ * Remove an entity from the system.
+ * @param {Game.Entity} entity A reference to the entity to remove.
+ */
+Game.System.prototype.removeEntity = function( entity ) 
+{
+    var index = this.entities.indexOf( entity );
+	this.entities.splice(index, 1);
+    this.entityCount--;
+
+	this.onEntityRemoved( entity );
+};
+
+/**
+ * Update system's entities.
+ */
+Game.System.prototype.process = function() 
+{
+	for( var i = 0, len = this.entityCount; i < len; ++i ) 
+	{
+		this.processEntity( this.entities[i] );
+	}
 };
 
 /**
@@ -71,15 +97,16 @@ Game.System.prototype.afterProcessing = function() { };
 Game.System.prototype.beforeProcessing = function() { };
 
 /**
- * Update system's entities.
+ * Method call when a entity is added to the system.
+ * @param {Game.Entity} entity Last entity added.
  */
-Game.System.prototype.process = function() 
-{
-	for( var i = 0, len = this.entityCount; i < len; ++i ) 
-	{
-		this.processEntity( this.entities[i] );
-	}
-};
+Game.System.prototype.onEntityAdded = function( entity ) { };
+
+/**
+ * Method call when a entity is removed from the system.
+ * @param {Game.Entity} entity Entity removed.
+ */
+Game.System.prototype.onEntityRemoved = function( entity ) { };
 
 /**
  * Update the given entity.

@@ -50,6 +50,17 @@ Renderer.Core.Spacial.prototype.add = function( object )
 };
 
 /**
+ * Remove a children from the spacial element.
+ * @param {Renderer.Core.Spacial} object Element to remove.
+ */
+Renderer.Core.Spacial.prototype.remove = function( object ) 
+{
+    var index = this.children.indexOf( object );
+    this.children.splice(index, 1);
+    this.childrenCounter--;
+};
+
+/**
  * Change the transformable linked to the spacial element.
  * @param {Core.Transformable} transformable A Transformable object.
  */
