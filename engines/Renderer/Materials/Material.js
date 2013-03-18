@@ -116,6 +116,12 @@ Renderer.Materials.Material.prototype.hide = function()
 };
 
 /**
+ * Prepare uniforms of the material to send to the shader.
+ * @param {Array.<string, Renderer.WebGL.UniformDefinition>} uniforms List of uniforms of the material.
+ */
+Renderer.Materials.Material.prototype.prepareMaterialUniforms = function( uniforms ) { };
+
+/**
  * Change the ambient color.
  * All values must be in a range of 0 and 255.
  * @param {Renderer.Core.Color|number} r Color object or red value.

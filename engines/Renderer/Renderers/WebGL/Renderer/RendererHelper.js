@@ -70,7 +70,7 @@ Renderer.WebGL.RendererHelper.prototype.useGeometry = function( geometry, contex
 		this.geometryConfiguration 	= /** @type {Renderer.WebGL.GeometryConfiguration} */(this.geometry.getConfiguration());
 
 		if( this.geometry.isDirty() ) {
-			// this.geometry.update();
+			this.geometry.update();
 		}
 
 		this.geometryConfiguration.bindGeometry( this.program.getAttributs(), context );

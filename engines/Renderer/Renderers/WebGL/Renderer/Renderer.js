@@ -50,6 +50,9 @@ Renderer.WebGLRenderer.prototype.initFlags = function()
 	this.context.enable( goog.webgl.DEPTH_TEST );
 	this.context.depthFunc(goog.webgl.LESS);
 
+	// Disable drawing of back faces.
+	this.context.enable( goog.webgl.CULL_FACE );
+
 	/*this.context.enable(goog.webgl.BLEND);
 	this.context.blendFunc(goog.webgl.SRC_ALPHA, goog.webgl.ONE_MINUS_SRC_ALPHA );*/
 };
@@ -122,6 +125,7 @@ Renderer.WebGLRenderer.prototype.renderMeshWithVBO = function( camera, mesh )
 	// Send model uniforms.
 	var uniforms 			= program.getModelUniforms();
 	uniforms['uModel'].data = mesh.getTransformable().getMatrix();
+	material.prepareMaterialUniforms( uniforms );
 	program.sendModelUniforms();
 
 	// Enable material.

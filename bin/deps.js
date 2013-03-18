@@ -30,7 +30,9 @@ goog.addDependency('../../../../Nucleus/engines/Renderer/Lights/DirectionalLight
 goog.addDependency('../../../../Nucleus/engines/Renderer/Lights/PointLight.js', ['Renderer.PointLight'], ['Renderer.Private.AbstractLight']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Lights/SpotLight.js', ['Renderer.SpotLight'], ['Renderer.Private.AbstractLight']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Materials/Material.js', ['Renderer.Materials.Material'], ['Renderer.Core.Color', 'Renderer.WebGL.ProgramLibrary', 'goog.webgl']);
+goog.addDependency('../../../../Nucleus/engines/Renderer/Materials/SpriteMaterial.js', ['Renderer.Materials.SpriteMaterial'], ['Renderer.Materials.Material']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Objects/Mesh.js', ['Renderer.Mesh'], ['Renderer.Core.Spacial', 'Renderer.Geometric.Geometry', 'Renderer.Materials.Material']);
+goog.addDependency('../../../../Nucleus/engines/Renderer/Objects/Sprite.js', ['Renderer.Sprite'], ['Renderer.Materials.SpriteMaterial', 'Renderer.Mesh', 'Renderer.PrimitiveBuilder', 'Renderer.Texture', 'goog.vec.Vec4']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/Renderer.js', ['Renderer.Renderer'], ['Renderer.Camera', 'Renderer.Scene', 'Renderer.TextureFactory']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Buffer/Buffer.js', ['Renderer.WebGL.Buffer'], ['goog.webgl']);
 goog.addDependency('../../../../Nucleus/engines/Renderer/Renderers/WebGL/Buffer/DataBuffer.js', ['Renderer.WebGL.DataBuffer'], ['Renderer.WebGL.Buffer']);

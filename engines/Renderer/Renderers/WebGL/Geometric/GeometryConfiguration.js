@@ -77,7 +77,7 @@ Renderer.WebGL.GeometryConfiguration.prototype.setAsNormal = function( indexData
 * @param {number=} type Type of the data.
 * @param {number=} offset Offset if the attribut depend of a parent structure.
 * @param {number=} size Total size if the attribut depend of a parent structure.
-* @param {Uint8Array|Uint16Array|Uint32Array|Float32Array=} data Data to push isn't the attribut.
+* @param {Uint8Array|Uint16Array|Uint32Array|Float32Array=} data Data to push in the attribut.
 */
 Renderer.WebGL.GeometryConfiguration.prototype.add = function( name, count, type, offset, size, data )
 {
@@ -86,6 +86,28 @@ Renderer.WebGL.GeometryConfiguration.prototype.add = function( name, count, type
     this.attributs[this.attributCount] = attribut;
     this.attributCount++;
 };
+
+/**
+* Update an attribut.
+* @param {string} name Name of the attribut. (ex: Position, Normal, …)
+* @param {Uint8Array|Uint16Array|Uint32Array|Float32Array} data Data to push in the attribut.
+*/
+Renderer.WebGL.GeometryConfiguration.prototype.update = function( name, data )
+{
+    var attribut = null;
+
+    for( var i = 0, len = this.attributs.length; i < len; ++i )
+    {
+        attribut = this.attributs[i];
+
+        if( attribut.name == name )
+        {
+            attribut.update( data );
+            break;
+        }
+    }
+};
+
 
 /**
 * Bind the attribut.

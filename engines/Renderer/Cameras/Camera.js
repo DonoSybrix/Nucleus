@@ -167,10 +167,8 @@ Renderer.Camera.prototype.makeFrustum = function( left, right, bottom, top, near
  */
 Renderer.Camera.prototype.changeType = function( type ) 
 {
-    // Default view direction.
-    this.setPosition( 0, 0, 2 );
-    this.lookAt( 0, 0, -5 );
-    this.setPosition( 0, 0, 0 );
+    // Default position.
+    this.setPosition( 0, 0, 5 );
 
     // Projection.
     switch( type )

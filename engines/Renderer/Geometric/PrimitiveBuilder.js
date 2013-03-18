@@ -2,6 +2,11 @@ goog.provide('Renderer.PrimitiveBuilder');
 goog.require('Renderer.Geometric.Geometry');
 
 /**
+* Array used for caching geometries created here.
+*/
+Renderer.PrimitiveBuilder.cache = [];
+
+/**
  * Create a plane geometry.
  * @return {Renderer.Geometric.Geometry} A plane geometry.
  */

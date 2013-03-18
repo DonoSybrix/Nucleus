@@ -71,3 +71,38 @@ Renderer.WebGL.ProgramLibrary.prototype.getDefaultProgram = function()
 
 	return this.programs['default'];
 };
+
+/**
+* Return the default sprite program of the renderer.
+* @return {Renderer.WebGL.Program} A reference to the program.
+*/
+Renderer.WebGL.ProgramLibrary.prototype.getDefaultSpriteProgram = function() 
+{
+	if( this.programs['sprite'] == undefined ) 
+	{
+		// Source code
+		var vertexSource   	 = 'vColor		  = aColor; \n';
+		vertexSource   	 	+= 'vTexCoord	  = aTexCoord; \n';
+		vertexSource		+= 'gl_Position   = (uMvp * uModel) * vec4( aPosition, 1.0);';
+
+		//var fragmentSource 	 = 'gl_FragColor  = texture2D(uTexture, vTexCoord) * vColor ;';
+
+		var fragmentSource 	 = '';
+		fragmentSource 	 	+= 'lowp vec4 textureColor = texture2D(uTexture, uTextureCoord.xy); \n';
+		fragmentSource 	 	+= 'if (textureColor.a < 0.5) \n';
+		fragmentSource 	 	+= 'discard; \n';
+		fragmentSource 	 	+= 'else \n';
+		fragmentSource 	 	+= 'gl_FragColor  = textureColor * vColor; \n';
+
+		// Create the program from the builder.
+		var programBuilder = new Renderer.WebGL.ProgramBuilder();
+		programBuilder.addUniform('uTexture', false,  1, WebGL.Program.Type.TEXTURE );
+		programBuilder.addUniform('uTextureCoord', false, 1, WebGL.Program.Type.VEC4 );
+		programBuilder.setVertexMainCode( vertexSource );
+		programBuilder.setFragmentMainCode( fragmentSource );
+
+		this.programs['sprite'] = programBuilder.create();
+	}
+
+	return this.programs['sprite'];
+};

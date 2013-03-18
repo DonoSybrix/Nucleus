@@ -66,14 +66,14 @@ Renderer.WebGL.Private.GeometryAttribut = function()
 * @param {number=} type Type of the data.
 * @param {number=} offset Offset if the attribut depend of a parent structure.
 * @param {number=} size Total size if the attribut depend of a parent structure.
-* @param {Uint8Array|Uint16Array|Uint32Array|Float32Array=} data Data to push isn't the attribut.
+* @param {Uint8Array|Uint16Array|Uint32Array|Float32Array=} data Data to push in the attribut.
 */
 Renderer.WebGL.Private.GeometryAttribut.prototype.prepare = function( name, count, type, offset, size, data )
 {
     // Offset is specified? Attribut didn't required parent buffer.
     if( offset != undefined && data != undefined ) {
         this.buffer = new Renderer.WebGL.DataBuffer();
-        this.buffer.fill( /** @type {ArrayBuffer} */(data) );
+        this.update( data );
     }
 
     this.count  = count;
@@ -81,4 +81,15 @@ Renderer.WebGL.Private.GeometryAttribut.prototype.prepare = function( name, coun
     this.offset = offset || this.offset;
     this.type   = type   || this.type;
     this.size   = size   || this.size;
+}
+
+/**
+* Update attribut.
+* @param {Uint8Array|Uint16Array|Uint32Array|Float32Array} data Data to push in the attribut.
+*/
+Renderer.WebGL.Private.GeometryAttribut.prototype.update = function( data )
+{
+    if( this.buffer != null ) {
+        this.buffer.fill( /** @type {ArrayBuffer} */(data) );
+    }
 }

@@ -58,6 +58,13 @@ Renderer.Geometric.Geometry = function()
     this.needUpdate = false;
 
     /**
+    * Indicate if the geometry need an update on texture coordinates.
+    * @type {boolean}
+    * @private
+    */
+    this.needTextureUpdate = false;
+
+    /**
     * List of normals.
     * @type {Float32Array|null}
     * @private
@@ -240,7 +247,17 @@ Renderer.Geometric.Geometry.prototype.isDirty = function()
  */
 Renderer.Geometric.Geometry.prototype.update = function() 
 {
+    if( this.configuration != null )
+    {
+        if( this.needTextureUpdate == true )
+        {
+            this.configuration.update('aTexCoord', this.textureCoordinates );
+            this.needTextureUpdate = false;
+        }
+    }
 
+
+    this.needUpdate = false;
 };
 
 /**
@@ -311,6 +328,7 @@ Renderer.Geometric.Geometry.prototype.setVertexNormalCount = function( normalCou
 {
     this.normals       = new Float32Array( normalCount * Renderer.Geometric.GeometryConfiguration.DATACOUNT_NORMAL );
     this.normalCount   = 0;
+    this.needUpdate    = true;
 };
 
 /**
@@ -321,6 +339,7 @@ Renderer.Geometric.Geometry.prototype.setVertexNormals = function( normals )
 {
     this.normals       = new Float32Array( normals );
     this.normalCount   = normals.length;
+    this.needUpdate    = true;
 };
 
 /**
@@ -331,6 +350,7 @@ Renderer.Geometric.Geometry.prototype.setVertexPositionCount = function( positio
 {
     this.positions       = new Float32Array( positionsCount * Renderer.Geometric.GeometryConfiguration.DATACOUNT_POSITION );
     this.positionCount   = 0;
+    this.needUpdate      = true;
 };
 
 /**
@@ -341,6 +361,7 @@ Renderer.Geometric.Geometry.prototype.setVertexPositions = function( positions )
 {
     this.positions       = new Float32Array( positions);
     this.positionCount   = positions.length;
+    this.needUpdate      = true;
 };
 
 /**
@@ -349,8 +370,10 @@ Renderer.Geometric.Geometry.prototype.setVertexPositions = function( positions )
  */
 Renderer.Geometric.Geometry.prototype.setVertexTextureCoordinateCount = function( coordinateCount ) 
 {
-    this.textureCoordinates       = new Float32Array( coordinateCount * Renderer.Geometric.GeometryConfiguration.DATACOUNT_TEXTURE );
-    this.textureCoordinateCount   = 0;
+    this.textureCoordinates         = new Float32Array( coordinateCount * Renderer.Geometric.GeometryConfiguration.DATACOUNT_TEXTURE );
+    this.textureCoordinateCount     = 0;
+    this.needUpdate                 = true;
+    this.needTextureUpdate          = true;
 };
 
 /**
@@ -361,4 +384,6 @@ Renderer.Geometric.Geometry.prototype.setVertexTextureCoordinates = function( co
 {
     this.textureCoordinates       = new Float32Array( coordinates );
     this.textureCoordinateCount   = coordinates.length;
+    this.needUpdate               = true;
+    this.needTextureUpdate        = true;
 };
